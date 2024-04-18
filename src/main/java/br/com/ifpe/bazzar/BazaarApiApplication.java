@@ -1,4 +1,4 @@
-package com.example.bazaarapi;
+package br.com.ifpe.bazzar;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
