@@ -15,7 +15,7 @@ import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 @RestController
 @RequestMapping("/api/usuario")
 @CrossOrigin
-public class ClienteController {
+public class UsuarioController {
 
    @Autowired
    private UsuarioService usuarioService;
