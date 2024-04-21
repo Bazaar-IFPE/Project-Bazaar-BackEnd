@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsuarioRequest {
 
-    private String foto;
-
     private String nomeCompleto;
 
     private String email;
