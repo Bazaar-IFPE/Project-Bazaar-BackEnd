@@ -23,10 +23,6 @@ import lombok.Setter;
 
 public class Usuario extends EntidadeAuditavel  {
   
-
-    @Column
-    private String foto;
-
     @Column
     private String nomeCompleto;
  

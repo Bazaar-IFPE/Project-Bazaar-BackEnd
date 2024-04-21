@@ -27,7 +27,7 @@ public class UsuarioRequest {
     public Usuario build() {
 
         return Usuario.builder()
-                .foto(foto)
+        
                 .nomeCompleto(nomeCompleto)
                 .email(email)
                 .senha(senha)
