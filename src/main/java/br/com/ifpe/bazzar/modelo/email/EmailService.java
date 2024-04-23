@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.modelo.usuario;
+package br.com.ifpe.bazzar.modelo.email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
