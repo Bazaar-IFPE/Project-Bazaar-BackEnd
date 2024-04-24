@@ -13,14 +13,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "Email_Verificador")
-@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -38,7 +36,7 @@ public class EmailVerificador {
     private Instant dataExpiracao;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO", referencedColumnName= "ID")
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName= "ID", unique = true)
     private Usuario usuario;
 
     
