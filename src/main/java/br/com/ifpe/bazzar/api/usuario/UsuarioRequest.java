@@ -1,5 +1,6 @@
 package br.com.ifpe.bazzar.api.usuario;
 
+import br.com.ifpe.bazzar.modelo.enums.TipoSituacaoUsuario;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,8 @@ public class UsuarioRequest {
 
     private String numeroTelefone;
 
+    private TipoSituacaoUsuario situacao;
+
     public Usuario build() {
 
         return Usuario.builder()
@@ -31,6 +34,7 @@ public class UsuarioRequest {
                 .senha(senha)
                 .cpf(cpf)
                 .numeroTelefone(numeroTelefone)
+                .situacao(situacao)
                 .build();
     }
 

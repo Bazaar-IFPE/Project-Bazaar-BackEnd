@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.bazzar.modelo.email.EmailService;
 import br.com.ifpe.bazzar.modelo.email.EmailVerificador;
+import br.com.ifpe.bazzar.modelo.enums.TipoSituacaoUsuario;
 import br.com.ifpe.bazzar.modelo.email.EmailRepository;
 
 @Service
@@ -48,6 +49,26 @@ public class UsuarioService {
 
     return savedUsuario;
        
+   }
+
+   public String verificarCadastro (String uuid){
+
+        EmailVerificador emailVerificacao = emailRepository.findByUuid(UUID.fromString(uuid)).get();
+
+        if (emailVerificacao != null) {
+                if(emailVerificacao.getDataExpiracao().compareTo(Instant.now()) >= 0){
+                        
+                        Usuario u = emailVerificacao.getUsuario();
+                        u.setSituacao(TipoSituacaoUsuario.ATIVO);
+                        repository.save(u);
+                        return "Usuário Verificado";
+
+                }else{
+                        emailRepository.delete(emailVerificacao);
+                        return "Tempo de verificação expirado";
+                }
+        }else return "Usuário não verificado";
+        
    }
 
 }
