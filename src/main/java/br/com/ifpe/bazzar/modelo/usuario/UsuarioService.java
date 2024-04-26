@@ -33,6 +33,7 @@ public class UsuarioService {
     usuario.setHabilitado(Boolean.TRUE);
     usuario.setVersao(1L);
     usuario.setDataCriacao(LocalDate.now());
+    usuario.setSituacao(TipoSituacaoUsuario.PENDENTE);
     Usuario savedUsuario = repository.save(usuario);
 
     // Criando e salvando o verificador de e-mail
@@ -42,6 +43,7 @@ public class UsuarioService {
     verificador.setDataExpiracao(Instant.now().plusMillis(900000));
     emailRepository.save(verificador);
 
+    
     // Enviando e-mail de verificação
     emailService.enviarEmailTexto(savedUsuario.getEmail(),
             "Novo usuário cadastrado",

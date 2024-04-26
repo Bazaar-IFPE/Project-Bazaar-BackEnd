@@ -33,7 +33,7 @@ public class Usuario extends EntidadeAuditavel  {
     @Column(nullable = false)
     private String nomeCompleto;
  
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
  
     @Column(nullable = false)
