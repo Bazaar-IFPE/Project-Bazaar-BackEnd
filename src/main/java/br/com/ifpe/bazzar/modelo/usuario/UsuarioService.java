@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.ifpe.bazzar.modelo.email.EmailService;
@@ -26,6 +27,9 @@ public class UsuarioService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+	private PasswordEncoder passwordEncoder;
+
    @Transactional
    public Usuario save(Usuario usuario) {
 
@@ -33,6 +37,7 @@ public class UsuarioService {
     usuario.setHabilitado(Boolean.TRUE);
     usuario.setVersao(1L);
     usuario.setDataCriacao(LocalDate.now());
+    usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
     usuario.setSituacao(TipoSituacaoUsuario.PENDENTE);
     Usuario savedUsuario = repository.save(usuario);
 
