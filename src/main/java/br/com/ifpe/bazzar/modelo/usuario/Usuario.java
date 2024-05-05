@@ -23,8 +23,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-
 public class Usuario extends EntidadeAuditavel  {
     
     @Column(nullable = false)
