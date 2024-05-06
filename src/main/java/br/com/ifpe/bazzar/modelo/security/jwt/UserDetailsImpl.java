@@ -1,5 +1,6 @@
 package br.com.ifpe.bazzar.modelo.security.jwt;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -8,27 +9,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 
-public class UserDetailsImpl implements UserDetails {
 
-	private String email;
+public class UserDetailsImpl implements UserDetails{
+
 	
-	private String senha;
+	private String username;
+	private String password;
 	
 	
-	public UserDetailsImpl(String senha, String email,
+	public UserDetailsImpl( String username, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		super();
 		
-		this.senha = senha;
-		this.email = email;
+		this.username = username;
+		this.password = password;
 		this.authorities = authorities;
 	}
 
 	public static UserDetailsImpl build(Usuario usuario) {
 		
 		return new UserDetailsImpl(
+			
+				usuario.getLogin(),
 				usuario.getSenha(),
-				usuario.getEmail(), 
 				new ArrayList<>());
 	}
 	
@@ -41,12 +44,12 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return senha;
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		return email;
+		return username;
 	}
 
 	@Override

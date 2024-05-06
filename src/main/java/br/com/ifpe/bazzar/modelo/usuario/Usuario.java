@@ -1,7 +1,6 @@
 package br.com.ifpe.bazzar.modelo.usuario;
 
 import org.hibernate.annotations.SQLRestriction;
-
 import br.com.ifpe.bazzar.modelo.enums.TipoSituacaoUsuario;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
@@ -27,7 +26,7 @@ import lombok.Setter;
 
 public class Usuario extends EntidadeAuditavel  {
     
-    @Column(nullable = false)
+    @Column
     private Long id;
     
     @Column(nullable = false)
@@ -35,6 +34,9 @@ public class Usuario extends EntidadeAuditavel  {
  
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false, unique = true)
+	private String login;
  
     @Column(nullable = false)
     private String senha;
