@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsuarioRequest {
 
-    private String nomeCompleto;
+    private String nome;
 
     private String email;
 
@@ -29,7 +29,7 @@ public class UsuarioRequest {
 
         return Usuario.builder()
         
-                .nomeCompleto(nomeCompleto)
+                .nome(nome)
                 .email(email)
                 .senha(senha)
                 .cpf(cpf)
