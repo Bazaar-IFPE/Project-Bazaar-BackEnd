@@ -28,7 +28,7 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDTO body){
+    public ResponseEntity <ResponseDTO> login(@RequestBody LoginRequestDTO body){
         Optional<Usuario> optionalUser = this.repository.findByEmail(body.email());
 
         if(optionalUser.isPresent()){
