@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.bazzar.modelo.dto.LoginRequestDTO;
 import br.com.ifpe.bazzar.modelo.dto.RegisterRequestDTO;
 import br.com.ifpe.bazzar.modelo.dto.ResponseDTO;
+import br.com.ifpe.bazzar.modelo.enums.TipoSituacaoUsuario;
 import br.com.ifpe.bazzar.modelo.infra.security.TokenService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
@@ -27,11 +28,19 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity <ResponseDTO>  login(@RequestBody LoginRequestDTO body){
-        Usuario user = this.repository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
-        if(passwordEncoder.matches(body.senha(), user.getSenha())) {
-            String token = this.tokenService.generateToken(user);
-            return ResponseEntity.ok(new ResponseDTO(user.getNome(), token));
+    public ResponseEntity login(@RequestBody LoginRequestDTO body){
+        Optional<Usuario> optionalUser = this.repository.findByEmail(body.email());
+
+        if(optionalUser.isPresent()){
+            Usuario usuario = optionalUser.get();
+            if(passwordEncoder.matches(body.senha(), usuario.getSenha())){
+                String token = this.tokenService.generateToken(usuario);
+                return ResponseEntity.ok(new ResponseDTO(usuario.getNome(), token));
+            } else {
+                System.out.println("Senha incorreta para o email: " + usuario.getEmail());
+            }
+        } else {
+            System.out.println("Usuario não encontrado para o email: " + body.email());
         }
         return ResponseEntity.badRequest().build();
     }
@@ -42,10 +51,13 @@ public class AuthController {
         Optional<Usuario> user = this.repository.findByEmail(body.email());
 
         if(user.isEmpty()) {
-        Usuario newUser = new Usuario();
+            Usuario newUser = new Usuario();
             newUser.setSenha(passwordEncoder.encode(body.senha()));
             newUser.setEmail(body.email());
             newUser.setNome(body.nome());
+            newUser.setCpf(body.cpf());
+            newUser.setNumeroTelefone(body.numeroTelefone());
+            newUser.setSituacao(TipoSituacaoUsuario.ATIVO);
             this.repository.save(newUser);
 
             String token = this.tokenService.generateToken(newUser);
