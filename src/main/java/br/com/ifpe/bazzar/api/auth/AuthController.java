@@ -30,7 +30,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(authDto));
     }
 
-    @PostMapping(value = "/usuario")
+    @PostMapping(value = "/register")
     public void inserirNovoUsuario(@RequestBody Usuario usuario) {
         usuarioService.save(usuario);
     }
