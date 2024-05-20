@@ -1,7 +1,7 @@
 package br.com.ifpe.bazzar.modelo.usuario;
 
 import org.hibernate.annotations.SQLRestriction;
-import br.com.ifpe.bazzar.modelo.enums.TipoSituacaoUsuario;
+import br.com.ifpe.bazzar.modelo.enums.UserType;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,7 +47,7 @@ public class Usuario extends EntidadeAuditavel  {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoSituacaoUsuario situacao;
+    private UserType situacao;
  
  }
  

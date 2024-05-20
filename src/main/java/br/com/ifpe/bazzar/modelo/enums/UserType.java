@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum TipoSituacaoUsuario {
+public enum UserType {
 
     ATIVO("A","Ativo"),
     INATIVO("I","Inativo"),
@@ -15,7 +15,7 @@ public enum TipoSituacaoUsuario {
     private String descricao;
 
     
-    private TipoSituacaoUsuario(String codigo, String descricao) {
+    private UserType(String codigo, String descricao) {
         this.codigo= codigo;
         this.descricao= descricao;
     }
@@ -37,7 +37,7 @@ public enum TipoSituacaoUsuario {
         this.codigo = codigo;
     }
     @JsonCreator
-    public static TipoSituacaoUsuario doValor(String codigo){
+    public static UserType doValor(String codigo){
         if(codigo.equals("A")){
             return ATIVO;
         }else if(codigo.equals("I")){

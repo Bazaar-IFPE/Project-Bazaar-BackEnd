@@ -3,9 +3,12 @@ package br.com.ifpe.bazzar.modelo.email;
 import java.time.Instant;
 import java.util.UUID;
 
+import br.com.ifpe.bazzar.modelo.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +26,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmailVerificador {
+public class Emails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +36,11 @@ public class EmailVerificador {
     private UUID uuid;
 
     @Column(nullable = false)
-    private Instant dataExpiracao;
+    private Instant expirationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EmailType emailType;
 
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO", referencedColumnName= "ID", unique = true)

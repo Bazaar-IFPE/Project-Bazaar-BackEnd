@@ -40,4 +40,5 @@ public class AuthController {
         return usuarioService.verificarCadastro(uuid);
     }
 
+
 }

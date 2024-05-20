@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public interface EmailRepository extends JpaRepository<EmailVerificador, Long>{
+public interface EmailsRepository extends JpaRepository<Emails, Long>{
     
-    public Optional<EmailVerificador> findByUuid(UUID uuid);
+    Optional<Emails> findByUuid(UUID uuid);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
@@ -36,5 +37,18 @@ public class UsuarioController {
     
    }
 
+   @PostMapping("/redefinir-senha")
+   public ResponseEntity<String> redefinirSenha (@RequestParam String email){
+    Usuario usuario = usuarioService.findByEmail(email);
+
+    if(usuario != null){
+        usuarioService.sendPasswordResetEmail(usuario);
+        return ResponseEntity.ok("Email de redefinição de senha enviado.");
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+    }
+
+
+   }
 }
 
