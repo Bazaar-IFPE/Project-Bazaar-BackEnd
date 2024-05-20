@@ -17,7 +17,7 @@ public class EmailsTemplateService {
             case VERIFICATION:
                 return templateEngine.process("verification", context);
             case PASSWORD_RESET:
-                return templateEngine.process("password-reset", context);
+                return templateEngine.process("password-reset-link", context);
             default:
                 throw new IllegalArgumentException("Tipo de email não suportado: " + emailType);
         }
