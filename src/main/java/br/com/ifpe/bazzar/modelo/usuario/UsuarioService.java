@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.ifpe.bazzar.modelo.email.EmailService;
+
 import br.com.ifpe.bazzar.modelo.email.EmailVerificador;
 import br.com.ifpe.bazzar.modelo.enums.TipoSituacaoUsuario;
+import br.com.ifpe.bazzar.modelo.messages.EmailService;
 import br.com.ifpe.bazzar.modelo.email.EmailRepository;
 
 @Service
@@ -41,18 +42,8 @@ public class UsuarioService {
     usuario.setSituacao(TipoSituacaoUsuario.PENDENTE);
     Usuario savedUsuario = repository.save(usuario);
 
-    // Criando e salvando o verificador de e-mail
-    EmailVerificador verificador = new EmailVerificador();
-    verificador.setUsuario(savedUsuario); // Utilizando o usuário salvo
-    verificador.setUuid(UUID.randomUUID());
-    verificador.setDataExpiracao(Instant.now().plusMillis(900000));
-    emailRepository.save(verificador);
+    emailService.enviarEmailConfirmacaoCadastroCliente(savedUsuario);
 
-    
-    // Enviando e-mail de verificação
-    emailService.enviarEmailTexto(savedUsuario.getEmail(),
-            "Novo usuário cadastrado",
-            "Você está recebendo um e-mail de cadastro. O número para validação é: " + verificador.getUuid());
 
     return savedUsuario;
        

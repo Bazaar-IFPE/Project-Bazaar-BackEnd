@@ -2,6 +2,8 @@ package br.com.ifpe.bazzar.api.usuario;
 
 import br.com.ifpe.bazzar.modelo.enums.TipoSituacaoUsuario;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +17,8 @@ public class UsuarioRequest {
 
     private String nomeCompleto;
 
+    @NotBlank(message = "O Email é de preenchimento obrigatório")
+    @Email
     private String email;
 
     private String senha;
