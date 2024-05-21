@@ -1,7 +1,6 @@
 package br.com.ifpe.bazzar.modelo.email;
 
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,25 +10,31 @@ import org.thymeleaf.context.Context;
 import br.com.ifpe.bazzar.modelo.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class EmailsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailsService.class);
+
     @Autowired
     private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
     private String remetente;
 
-     @Autowired
+    @Autowired
     private EmailsTokenService emailsTokenService;
 
     @Autowired
     private EmailsTemplateService emailsTemplateService;
 
-
-     public String enviarEmail(EmailType emailType, String destinatario, Map<String, Object> parameters, Usuario usuario) {
+    public String enviarEmail(EmailType emailType, String destinatario, Map<String, Object> parameters, Usuario usuario) {
 
         try {
+            logger.info("Preparing email of type {} for user {}", emailType, usuario.getId());
+
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
@@ -58,8 +63,10 @@ public class EmailsService {
 
             javaMailSender.send(mimeMessage);
 
+            logger.info("Email of type {} sent to {}", emailType, destinatario);
             return "Email enviado";
         } catch (Exception e) {
+            logger.error("Erro ao tentar enviar email para {}: {}", destinatario, e.getLocalizedMessage(), e);
             return "Erro ao tentar enviar email: " + e.getLocalizedMessage();
         }
     }

@@ -1,6 +1,12 @@
+<!DOCTYPE html>
 <html>
+<head>
+    <title>Verificação de Conta</title>
+</head>
 <body>
-    <p>Olá, <span th:text="${name}">Nome</span>,</p>
-    <p>Bem-vindo ao nosso serviço!</p>
+    <p>Olá, ${usuario.nome}!</p>
+    <p>Para verificar sua conta, por favor clique no link abaixo:</p>
+    <p><a href="http://localhost:8080/verificar?uuid=${uuid}">Verificar Conta</a></p>
+    <p>Obrigado!</p>
 </body>
 </html>
