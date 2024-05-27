@@ -43,7 +43,7 @@ public class Emails {
     private EmailType emailType;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO", referencedColumnName= "ID", unique = true)
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName= "ID")
     private Usuario usuario;
 
     

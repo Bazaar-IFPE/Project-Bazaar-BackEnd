@@ -59,6 +59,7 @@ public class UsuarioService {
         // Cria um novo objeto emails
         Emails emails = new Emails();
         emails.setUsuario(usuario);
+        emails.setEmailType(emailType);
         emails.setUuid(UUID.randomUUID());
         emails.setExpirationDate(Instant.now().plusMillis(900000));
         emailRepository.save(emails);
