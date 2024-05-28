@@ -48,7 +48,6 @@ public class UsuarioService {
 
         Usuario savedUsuario = repository.save(usuario);
 
-        logger.info("User saved with ID: {}", savedUsuario.getId());
         return savedUsuario;
     }
 

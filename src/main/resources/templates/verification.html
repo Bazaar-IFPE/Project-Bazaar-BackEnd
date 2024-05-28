@@ -4,9 +4,9 @@
     <title>Verificação de Conta</title>
 </head>
 <body>
-    <p>Olá, ${usuario.nome}!</p>
+    <p>Olá, [[${usuario.nomeCompleto}]]!</p>
     <p>Para verificar sua conta, por favor clique no link abaixo:</p>
-    <p><a href="http://localhost:8080/verificar?uuid=${uuid}">Verificar Conta</a></p>
+    <p><a href="http://localhost:8080/auth/verificar?uuid=[[${emails.uuid}]]">Verificar Conta</a></p>
     <p>Obrigado!</p>
 </body>
 </html>
