@@ -67,7 +67,7 @@ public class UsuarioService {
 
         // Prepara os parâmetros do email
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("uuid", emails.getUuid());
+        parameters.put("token", emails.getUuid());
         parameters.put("usuario", usuario);
 
         try {
@@ -90,16 +90,16 @@ public class UsuarioService {
     }
 
     public String verificarCadastro(String uuid) {
-        Emails emailVerificacao = emailRepository.findByUuid(UUID.fromString(uuid)).orElse(null);
+        Emails emailVerification = emailRepository.findByUuid(UUID.fromString(uuid));
 
-        if (emailVerificacao != null) {
-            if (emailVerificacao.getExpirationDate().compareTo(Instant.now()) >= 0) {
-                Usuario u = emailVerificacao.getUsuario();
+        if (emailVerification != null) {
+            if (emailVerification.getExpirationDate().compareTo(Instant.now()) >= 0) {
+                Usuario u = emailVerification.getUsuario();
                 u.setSituacao(UserType.ATIVO);
                 repository.save(u);
                 return "Usuário Verificado";
             } else {
-                emailRepository.delete(emailVerificacao);
+                emailRepository.delete(emailVerification);
                 return "Tempo de verificação expirado";
             }
         } else {
@@ -108,23 +108,13 @@ public class UsuarioService {
     }
 
     public Usuario findByEmail(String email) {
-        return repository.findByEmail(email).orElse(null);
+        Optional<Usuario> usuario = repository.findByEmail(email);
+        return usuario.orElse(null);
     }
 
     public void sendPasswordResetEmail(Usuario usuario) {
         createAndSendEmail(usuario, EmailType.PASSWORD_RESET);
     }
 
-    @Transactional
-    public void updatePassword(String token, String newPassword) {
-        Optional<Emails> optionalEmails = emailRepository.findByUuid(UUID.fromString(token));
-        if (optionalEmails.isPresent()) {
-            Emails emails = optionalEmails.get();
-            emails.getUsuario().setSenha(passwordEncoder.encode(newPassword));
-            repository.save(emails.getUsuario());
-            emailRepository.delete(emails); // Token usado, removendo
-        } else {
-            throw new RuntimeException("Token inválido ou expirado");
-        }
-    }
+   
 }

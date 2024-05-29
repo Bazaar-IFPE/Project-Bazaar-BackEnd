@@ -25,9 +25,6 @@ public class EmailsService {
     private String remetente;
 
     @Autowired
-    private EmailsTokenService emailsTokenService;
-
-    @Autowired
     private EmailsTemplateService emailsTemplateService;
 
     public String enviarEmail(EmailType emailType, String destinatario, Map<String, Object> parameters, Usuario usuario) {
@@ -54,9 +51,6 @@ public class EmailsService {
 
             Context context = new Context();
             parameters.forEach(context::setVariable);
-
-            Emails token = emailsTokenService.createToken(usuario, emailType);
-            context.setVariable("token", token.getUuid().toString());
 
             String html = emailsTemplateService.getTemplate(emailType, context);
             helper.setText(html, true);

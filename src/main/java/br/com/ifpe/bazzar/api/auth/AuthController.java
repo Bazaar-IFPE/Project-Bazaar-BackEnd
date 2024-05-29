@@ -1,6 +1,7 @@
 package br.com.ifpe.bazzar.api.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,5 +41,18 @@ public class AuthController {
         return usuarioService.verificarCadastro(uuid);
     }
 
+    @PostMapping("/redefinir-senha")
+    public ResponseEntity<String> redefinirSenha(@RequestBody PasswordResetRequest email) {
+    System.out.println("Email recebido: " + email);
+    Usuario usuario = usuarioService.findByEmail(email.getEmail());
+    System.out.println("Usuário encontrado: " + usuario);
+
+    if (usuario != null) {
+        usuarioService.sendPasswordResetEmail(usuario);
+        return ResponseEntity.ok("Email de redefinição de senha enviado.");
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+    }
+}
 
 }
