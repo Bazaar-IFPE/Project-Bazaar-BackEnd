@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
+import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
 import br.com.ifpe.bazzar.modelo.security.jwt.AuthService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;

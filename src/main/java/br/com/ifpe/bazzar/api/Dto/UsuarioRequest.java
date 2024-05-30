@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.usuario;
+package br.com.ifpe.bazzar.api.Dto;
 
 import br.com.ifpe.bazzar.modelo.enums.UserType;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;

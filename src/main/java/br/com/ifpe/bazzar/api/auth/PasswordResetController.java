@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.usuario;
+package br.com.ifpe.bazzar.api.auth;
 
 import java.time.Instant;
 import java.util.UUID;
