@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
@@ -45,6 +47,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SpringTemplateEngine templateEngine;
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authDto) {
@@ -77,8 +82,18 @@ public class AuthController {
 
     @GetMapping("/password-reset")
     public String showPasswordResetForm(@RequestParam("token") String token, Model model) {
-        model.addAttribute("token", token);
-        return "password-reset";
+        // Criar um contexto Thymeleaf
+        Context context = new Context();
+        context.setVariable("token", token);
+
+        // Renderizar o template para uma String
+        String htmlContent = templateEngine.process("form-password-reset", context);
+
+        // Adicionar o conteúdo HTML ao modelo
+        model.addAttribute("htmlContent", htmlContent);
+
+        // Retornar a página que exibe o conteúdo renderizado
+        return htmlContent;
     }
 
     @PostMapping("/password-reset")
