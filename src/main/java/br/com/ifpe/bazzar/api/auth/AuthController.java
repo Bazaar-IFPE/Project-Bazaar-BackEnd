@@ -68,9 +68,8 @@ public class AuthController {
 
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(@RequestBody PasswordResetRequest email) {
-    System.out.println("Email recebido: " + email);
+
     Usuario usuario = usuarioService.findByEmail(email.getEmail());
-    System.out.println("Usuário encontrado: " + usuario);
 
     if (usuario != null) {
         usuarioService.sendPasswordResetEmail(usuario);
@@ -82,17 +81,11 @@ public class AuthController {
 
     @GetMapping("/password-reset")
     public String showPasswordResetForm(@RequestParam("token") String token, Model model) {
-        // Criar um contexto Thymeleaf
+        
         Context context = new Context();
         context.setVariable("token", token);
-
-        // Renderizar o template para uma String
         String htmlContent = templateEngine.process("form-password-reset", context);
-
-        // Adicionar o conteúdo HTML ao modelo
         model.addAttribute("htmlContent", htmlContent);
-
-        // Retornar a página que exibe o conteúdo renderizado
         return htmlContent;
     }
 

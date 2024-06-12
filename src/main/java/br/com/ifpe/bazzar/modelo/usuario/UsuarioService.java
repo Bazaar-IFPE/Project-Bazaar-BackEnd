@@ -1,6 +1,7 @@
 package br.com.ifpe.bazzar.modelo.usuario;
 
 import jakarta.transaction.Transactional;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -53,8 +54,7 @@ public class UsuarioService {
 
     @Transactional
     public void createAndSendEmail(Usuario usuario, EmailType emailType) {
-        logger.info("Creating email for user ID: {}", usuario.getId());
-
+        
         // Cria um novo objeto emails
         Emails emails = new Emails();
         emails.setUsuario(usuario);
@@ -63,7 +63,6 @@ public class UsuarioService {
         emails.setExpirationDate(Instant.now().plusMillis(900000));
         emailRepository.save(emails);
 
-        logger.info("Email entry saved with UUID: {}", emails.getUuid());
 
         // Prepara os parâmetros do email
         Map<String, Object> parameters = new HashMap<>();
@@ -72,7 +71,6 @@ public class UsuarioService {
 
         try {
             emailService.enviarEmail(emailType, usuario.getEmail(), parameters, usuario);
-            logger.info("Email sent to: {}", usuario.getEmail());
         } catch (Exception e) {
             logger.error("Error sending email: {}", e.getMessage(), e);
         }
