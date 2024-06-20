@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Verificação de Conta</title>
 </head>
 <body>
-    <p>Olá, [[${usuario.nomeCompleto}]]!</p>
+    <p>Olá, <span th:text="${usuario.nomeCompleto}">Nome</span>!</p>
     <p>Para verificar sua conta, por favor clique no link abaixo:</p>
-    <p><a href="http://localhost:8080/auth/verificarCadastro/uuid=[[${token}]]">Verificar Conta</a></p>
+    <p><a th:href="@{http://localhost:8080/auth/verificarCadastro(uuid=${token})}">Verificar Conta</a></p>
     <p>Obrigado!</p>
 </body>
 </html>

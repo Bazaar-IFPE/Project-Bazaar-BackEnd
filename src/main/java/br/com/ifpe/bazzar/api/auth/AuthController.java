@@ -61,10 +61,10 @@ public class AuthController {
         usuarioService.save(usuario);
     }
 
-    @GetMapping(value = "/verificarCadastro/{uuid}")
-    public String verificarCadastro(@PathVariable("uuid") String uuid) {
+    @GetMapping(value = "/verificarCadastro")
+    public String verificarCadastro(@RequestParam("uuid") String uuid) {
         return usuarioService.verificarCadastro(uuid);
-    }
+    }    
 
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(@RequestBody PasswordResetRequest email) {
