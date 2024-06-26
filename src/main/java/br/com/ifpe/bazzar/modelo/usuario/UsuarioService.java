@@ -38,9 +38,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario saveUser(Usuario usuario) {
-        logger.info("Saving user...");
 
-        // Salvando novo usuário
         usuario.setHabilitado(Boolean.TRUE);
         usuario.setVersao(1L);
         usuario.setDataCriacao(LocalDate.now());
@@ -55,7 +53,6 @@ public class UsuarioService {
     @Transactional
     public void createAndSendEmail(Usuario usuario, EmailType emailType) {
         
-        // Cria um novo objeto emails
         Emails emails = new Emails();
         emails.setUsuario(usuario);
         emails.setEmailType(emailType);
@@ -64,7 +61,6 @@ public class UsuarioService {
         emailRepository.save(emails);
 
 
-        // Prepara os parâmetros do email
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("token", emails.getUuid());
         parameters.put("usuario", usuario);
@@ -78,7 +74,6 @@ public class UsuarioService {
 
     @Transactional
     public Usuario save(Usuario usuario) {
-        logger.info("Starting save process for user...");
         
         Usuario savedUsuario = saveUser(usuario);
         createAndSendEmail(savedUsuario, EmailType.VERIFICATION);
@@ -102,6 +97,27 @@ public class UsuarioService {
             }
         } else {
             return "Usuário não verificado";
+        }
+    }
+
+    public String resetPassword(String token, String newPassword, String confirmPassword) {
+
+        if (!newPassword.equals(confirmPassword)) {
+            return "redirect:/password-reset?error=mismatch&token=" + token;
+        }
+
+        Emails emailPassword = emailRepository.findByUuid(UUID.fromString(token));
+        if (emailPassword != null) {
+            if (emailPassword.getExpirationDate().compareTo(Instant.now()) >= 0) {
+                emailPassword.getUsuario().setSenha(passwordEncoder.encode(newPassword));
+                repository.save(emailPassword.getUsuario());
+                emailRepository.delete(emailPassword); // Token usado, removendo
+                return "redirect:/login?resetSuccess";
+            } else {
+                return "redirect:/password-reset?error=expired&token=" + token;
+            }
+        } else {
+            return "redirect:/password-reset?error=invalid&token=" + token;
         }
     }
 

@@ -1,12 +1,9 @@
 package br.com.ifpe.bazzar.api.auth;
 
-import java.time.Instant;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +17,8 @@ import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
-import br.com.ifpe.bazzar.modelo.email.Emails;
-import br.com.ifpe.bazzar.modelo.email.EmailsRepository;
 import br.com.ifpe.bazzar.modelo.security.jwt.AuthService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
-import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 
 @RestController
@@ -37,15 +31,6 @@ public class AuthController {
 
     @Autowired
     private UsuarioService usuarioService;
-
-    @Autowired
-    private EmailsRepository emailsRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private SpringTemplateEngine templateEngine;
@@ -92,24 +77,9 @@ public class AuthController {
     public String handlePasswordReset(@RequestParam("token") String token,
                                       @RequestParam("newPassword") String newPassword,
                                       @RequestParam("confirmPassword") String confirmPassword) {
-
-        if (!newPassword.equals(confirmPassword)) {
-            return "redirect:/password-reset?error=mismatch&token=" + token;
-        }
-
-        Emails emailPassword = emailsRepository.findByUuid(UUID.fromString(token));
-        if (emailPassword != null) {
-            if (emailPassword.getExpirationDate().compareTo(Instant.now()) >= 0) {
-                emailPassword.getUsuario().setSenha(passwordEncoder.encode(newPassword));
-                usuarioRepository.save(emailPassword.getUsuario());
-                emailsRepository.delete(emailPassword); // Token usado, removendo
-                return "redirect:/login?resetSuccess";
-            } else {
-                return "redirect:/password-reset?error=expired&token=" + token;
-            }
-        } else {
-            return "redirect:/password-reset?error=invalid&token=" + token;
-        }
+                                
+        return usuarioService.resetPassword(token, newPassword, confirmPassword);
+      
     }
 
 

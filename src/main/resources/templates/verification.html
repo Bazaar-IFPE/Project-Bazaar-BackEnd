@@ -1,12 +1,88 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-    <title>Verificação de Conta</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+  <meta name="x-apple-disable-message-reformatting">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    @media only screen and (max-width: 600px){
+      .watermark{
+        background:#000000 !important;
+      }
+    }
+    .button {
+      display: inline-block;
+      padding: 1em 2em;
+      margin-top: 1em;
+      font-size: 1rem;
+      color: #ffffff!important;
+      background-color: #ff6600;
+      text-decoration: none !important;
+      text-align: center;
+      border-radius: 5px;
+    }
+    .button:hover {
+      background-color: #e65c00;
+    }
+    .pFinal{
+        color: #ffffff;
+    }
+    .pFinal:hover{
+        color: #ff6600;
+    }
+  </style>
+  <title>Verificação de Conta</title>
 </head>
-<body>
-    <p>Olá, <span th:text="${usuario.nomeCompleto}">Nome</span>!</p>
-    <p>Para verificar sua conta, por favor clique no link abaixo:</p>
-    <p><a th:href="@{http://localhost:8080/auth/verificarCadastro(uuid=${token})}">Verificar Conta</a></p>
-    <p>Obrigado!</p>
+
+<body class="body" style="margin: 0; padding: 0; background:#ffffff; font-family: 'Open Sans', 'Tahoma', sans-serif; line-height: 2.1em;">
+  
+  <div role="article" aria-roledescription="email" lang="pt-BR" dir="ltr" style="font-size:medium; font-family: 'Open Sans', 'Tahoma', sans-serif; line-height: 2.1em;">
+
+      <table role="presentation" style="width: 60.5em; max-width:100%; background:#000000; margin: 0 auto; text-align: center;" align="center" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+            <br>
+            <table role="presentation" style="width:100%; background:#000000; margin: 0 auto;" align="center" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="padding: 0 1.5em;">
+                  <h1 style="text-align: center; font-size: 1.5em; margin-bottom: 1.5rem; color: #ffffff;">Verificação de Conta</h1>
+                </td>
+              </tr>
+            </table>
+  
+            <table role="presentation" style="width:100%; background:#121212; margin: 0 auto;" align="center" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="padding: 0 1.5em;color: #ffffff">
+                  <p>Olá <span th:text="${usuario.nomeCompleto}">Nome</span>, Bem vindo ao Baazar!</p>
+                  <p>Para verificar sua conta, por favor clique no botão abaixo:</p>
+                  <p><a class="button" th:href="@{http://localhost:8080/auth/verificarCadastro(uuid=${token})}">Verificar Conta</a></p>
+                </td>
+              </tr>
+            </table>
+            
+            <table role="presentation" style="width:100%; background:#000000; margin: 0 auto;" align="center" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="padding: 0 1.5em;">
+                    <p class="pFinal">Obrigado!</p>
+                  </td>
+                
+              </tr>
+            </table>
+  
+        </td>
+      </tr>
+    </table>
+
+  </div>
 </body>
 </html>
