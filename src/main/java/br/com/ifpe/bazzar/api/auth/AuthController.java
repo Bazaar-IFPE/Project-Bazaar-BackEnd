@@ -77,7 +77,7 @@ public class AuthController {
     public String handlePasswordReset(@RequestParam("token") String token,
                                       @RequestParam("newPassword") String newPassword,
                                       @RequestParam("confirmPassword") String confirmPassword) {
-                                
+                         
         return usuarioService.resetPassword(token, newPassword, confirmPassword);
       
     }

@@ -112,7 +112,7 @@ public class UsuarioService {
                 emailPassword.getUsuario().setSenha(passwordEncoder.encode(newPassword));
                 repository.save(emailPassword.getUsuario());
                 emailRepository.delete(emailPassword); // Token usado, removendo
-                return "redirect:/login?resetSuccess";
+                return "redirect:/login";
             } else {
                 return "redirect:/password-reset?error=expired&token=" + token;
             }
