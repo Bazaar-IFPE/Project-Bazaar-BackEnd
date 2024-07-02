@@ -56,7 +56,7 @@ public class AuthController {
     Usuario usuario = usuarioService.findByEmail(email.getEmail());
 
     if (usuario != null) {
-        usuarioService.sendPasswordResetEmail(usuario);
+        usuarioService.sendPasswordReset(usuario);
         return ResponseEntity.ok("Email de redefinição de senha enviado.");
     } else {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");

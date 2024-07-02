@@ -44,14 +44,11 @@ public class UsuarioService {
         usuario.setDataCriacao(LocalDate.now());
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuario.setSituacao(UserType.PENDENTE);
-
-        Usuario savedUsuario = repository.save(usuario);
-
-        return savedUsuario;
+        return repository.save(usuario);
     }
 
     @Transactional
-    public void createAndSendEmail(Usuario usuario, EmailType emailType) {
+    public void SendEmail(Usuario usuario, EmailType emailType) {
         
         Emails emails = new Emails();
         emails.setUsuario(usuario);
@@ -76,7 +73,7 @@ public class UsuarioService {
     public Usuario save(Usuario usuario) {
         
         Usuario savedUsuario = saveUser(usuario);
-        createAndSendEmail(savedUsuario, EmailType.VERIFICATION);
+        SendEmail(savedUsuario, EmailType.VERIFICATION);
         
         logger.info("Save process completed for user ID: {}", savedUsuario.getId());
         return savedUsuario;
@@ -111,7 +108,7 @@ public class UsuarioService {
             if (emailPassword.getExpirationDate().compareTo(Instant.now()) >= 0) {
                 emailPassword.getUsuario().setSenha(passwordEncoder.encode(newPassword));
                 repository.save(emailPassword.getUsuario());
-                emailRepository.delete(emailPassword); // Token usado, removendo
+                emailRepository.delete(emailPassword);
                 return "redirect:/login";
             } else {
                 return "redirect:/password-reset?error=expired&token=" + token;
@@ -126,8 +123,8 @@ public class UsuarioService {
         return usuario.orElse(null);
     }
 
-    public void sendPasswordResetEmail(Usuario usuario) {
-        createAndSendEmail(usuario, EmailType.PASSWORD_RESET);
+    public void sendPasswordReset(Usuario usuario) {
+        SendEmail(usuario, EmailType.PASSWORD_RESET);
     }
 
    
