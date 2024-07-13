@@ -19,6 +19,7 @@ import br.com.ifpe.bazzar.modelo.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.enums.UserType;
 import br.com.ifpe.bazzar.modelo.email.EmailsRepository;
 
+
 @Service
 public class UsuarioService {
 
@@ -35,6 +36,7 @@ public class UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @Transactional
     public Usuario saveUser(Usuario usuario) {
@@ -100,21 +102,22 @@ public class UsuarioService {
     public String resetPassword(String token, String newPassword, String confirmPassword) {
 
         if (!newPassword.equals(confirmPassword)) {
-            return "redirect:/password-reset?error=mismatch&token=" + token;
-        }
+            return "no-match";
+        }else{
+            Emails emailPassword = emailRepository.findByUuid(UUID.fromString(token));
 
-        Emails emailPassword = emailRepository.findByUuid(UUID.fromString(token));
-        if (emailPassword != null) {
-            if (emailPassword.getExpirationDate().compareTo(Instant.now()) >= 0) {
-                emailPassword.getUsuario().setSenha(passwordEncoder.encode(newPassword));
-                repository.save(emailPassword.getUsuario());
-                emailRepository.delete(emailPassword);
-                return "redirect:/login";
+            if (emailPassword != null) {
+                if (emailPassword.getExpirationDate().compareTo(Instant.now()) >= 0) {
+                    emailPassword.getUsuario().setSenha(passwordEncoder.encode(newPassword));
+                    repository.save(emailPassword.getUsuario());
+                    emailRepository.delete(emailPassword);
+                    return "redefined";
+                } else {
+                    return "token-invalid";
+                }
             } else {
-                return "redirect:/password-reset?error=expired&token=" + token;
+                return "token-invalid";
             }
-        } else {
-            return "redirect:/password-reset?error=invalid&token=" + token;
         }
     }
 

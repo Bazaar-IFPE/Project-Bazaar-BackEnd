@@ -76,10 +76,25 @@ public class AuthController {
     @PostMapping("/password-reset")
     public String handlePasswordReset(@RequestParam("token") String token,
                                       @RequestParam("newPassword") String newPassword,
-                                      @RequestParam("confirmPassword") String confirmPassword) {
+                                      @RequestParam("confirmPassword") String confirmPassword, Model model) {
                          
-        return usuarioService.resetPassword(token, newPassword, confirmPassword);
+        String result= usuarioService.resetPassword(token, newPassword, confirmPassword);
       
+        if("redefined".equals(result)){
+            String definição = "Ok!";
+            Context context = new Context();
+            context.setVariable("context",definição);
+            String template = templateEngine.process("feedback-p", context);
+            model.addAttribute("template", template);
+            return template;
+        }else{
+            String definição = "token inválido!";
+            Context context = new Context();
+            context.setVariable("context",definição);
+            String template = templateEngine.process("feedback-n", context);
+            model.addAttribute("template", template);
+            return template;
+        }
     }
 
 
