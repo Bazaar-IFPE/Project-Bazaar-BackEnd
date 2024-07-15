@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.auth;
+package br.com.ifpe.bazzar.api.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/usuario")
 @CrossOrigin
-public class AuthController {
+public class UsuarioController {
 
     @Autowired
     private AuthService authService;
@@ -46,8 +46,14 @@ public class AuthController {
     }
 
     @GetMapping(value = "/verificarCadastro")
-    public String verificarCadastro(@RequestParam("uuid") String uuid) {
-        return usuarioService.verificarCadastro(uuid);
+    public String verificarCadastro(@RequestParam("uuid") String uuid, Model model) {
+        
+        String result= usuarioService.verificarCadastro(uuid);
+
+        if ("Verificado".equals(result)) {
+            return renderTemplate(model, "feedback-p", "usuario verificado!");
+        }else return null;
+
     }    
 
     @PostMapping("/redefinir-senha")
@@ -78,24 +84,28 @@ public class AuthController {
                                       @RequestParam("newPassword") String newPassword,
                                       @RequestParam("confirmPassword") String confirmPassword, Model model) {
                          
-        String result= usuarioService.resetPassword(token, newPassword, confirmPassword);
       
-        if("redefined".equals(result)){
-            String definição = "Ok!";
-            Context context = new Context();
-            context.setVariable("context",definição);
-            String template = templateEngine.process("feedback-p", context);
-            model.addAttribute("template", template);
-            return template;
-        }else{
-            String definição = "token inválido!";
-            Context context = new Context();
-            context.setVariable("context",definição);
-            String template = templateEngine.process("feedback-n", context);
-            model.addAttribute("template", template);
-            return template;
+        try {
+            String result = usuarioService.resetPassword(token, newPassword, confirmPassword);
+    
+            if ("redefined".equals(result)) {
+                return renderTemplate(model, "feedback-p", "Redefinição realizada!");
+            } else {
+                return renderTemplate(model, "feedback-n", "Token inválido!");
+            }
+        } catch (Exception e) {
+            return renderTemplate(model, "feedback-n", "Erro ao redefinir a senha!");
         }
+    
     }
 
+    private String renderTemplate(Model model, String templateName, String message) {
+        Context context = new Context();
+        context.setVariable("context", message);
+        String template = templateEngine.process(templateName, context);
+        model.addAttribute("template", template);
+        return template;
+    }
 
 }
+

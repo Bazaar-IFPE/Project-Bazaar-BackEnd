@@ -89,7 +89,7 @@ public class UsuarioService {
                 Usuario u = emailVerification.getUsuario();
                 u.setSituacao(UserType.ATIVO);
                 repository.save(u);
-                return "Usuário Verificado";
+                return "Verificado";
             } else {
                 emailRepository.delete(emailVerification);
                 return "Tempo de verificação expirado";
