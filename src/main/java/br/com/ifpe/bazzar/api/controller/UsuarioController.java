@@ -45,7 +45,7 @@ public class UsuarioController {
         usuarioService.save(usuario);
     }
 
-    @GetMapping(value = "/verificarCadastro")
+    @GetMapping(value = "/checkRegistration")
     public String verificarCadastro(@RequestParam("uuid") String uuid, Model model) {
         
         String result= usuarioService.verificarCadastro(uuid);
