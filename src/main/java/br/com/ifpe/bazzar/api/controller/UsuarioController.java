@@ -17,6 +17,7 @@ import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
+import br.com.ifpe.bazzar.api.Dto.UsuarioRequest;
 import br.com.ifpe.bazzar.modelo.security.jwt.AuthService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
@@ -41,8 +42,10 @@ public class UsuarioController {
     }
 
     @PostMapping(value = "/register")
-    public void inserirNovoUsuario(@RequestBody Usuario usuario) {
-        usuarioService.save(usuario);
+    public ResponseEntity<Usuario> inserirNovoUsuario(@RequestBody UsuarioRequest request) {
+
+        usuarioService.save(request.build());
+        return new ResponseEntity<Usuario>(HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/checkRegistration")
