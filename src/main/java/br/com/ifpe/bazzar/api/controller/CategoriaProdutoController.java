@@ -22,7 +22,7 @@ import br.com.ifpe.bazzar.modelo.CategoriaProduto.CategoriaProdutoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/categoriaproduto")
+@RequestMapping("/api/categoriaproduto")
 @CrossOrigin
 public class CategoriaProdutoController {
     

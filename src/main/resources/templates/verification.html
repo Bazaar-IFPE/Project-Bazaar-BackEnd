@@ -65,7 +65,7 @@
                 <td style="padding: 0 1.5em;color: #ffffff">
                   <p>Olá <span th:text="${usuario.nomeCompleto}">Nome</span>, Bem vindo ao Baazar!</p>
                   <p>Para verificar sua conta, por favor clique no botão abaixo:</p>
-                  <p><a class="button" th:href="@{http://localhost:8080/usuario/checkRegistration(uuid=${token})}">Verificar Conta</a></p>
+                  <p><a class="button" th:href="@{http://localhost:8080/api/usuario/checkRegistration(uuid=${token})}">Verificar Conta</a></p>
                 </td>
               </tr>
             </table>

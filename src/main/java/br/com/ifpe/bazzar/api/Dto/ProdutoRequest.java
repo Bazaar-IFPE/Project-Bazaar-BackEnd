@@ -32,6 +32,7 @@ public class ProdutoRequest {
            .codigo(codigo)
            .titulo(titulo)
            .descricao(descricao)
+           .valorUnitario(valorUnitario)
            .build();
    }
 }

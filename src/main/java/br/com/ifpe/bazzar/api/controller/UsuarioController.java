@@ -18,12 +18,12 @@ import org.thymeleaf.context.Context;
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
 import br.com.ifpe.bazzar.api.Dto.UsuarioRequest;
-import br.com.ifpe.bazzar.modelo.security.jwt.AuthService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
+import br.com.ifpe.bazzar.security.jwt.AuthService;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/api/usuario")
 @CrossOrigin
 public class UsuarioController {
 

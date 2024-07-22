@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.modelo.security.jwt;
+package br.com.ifpe.bazzar.security.jwt;
 
 import java.security.Key;
 import java.util.Date;

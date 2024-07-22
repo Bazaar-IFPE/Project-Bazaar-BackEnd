@@ -10,7 +10,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class ProdutoService {
-    @Autowired
+   @Autowired
    private ProdutoRepository repository;
 
    @Transactional

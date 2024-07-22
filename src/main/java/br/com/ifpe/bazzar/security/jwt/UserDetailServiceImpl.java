@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.modelo.security.jwt;
+package br.com.ifpe.bazzar.security.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
