@@ -1,6 +1,5 @@
 package br.com.ifpe.bazzar.modelo.produto;
 
-import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 import br.com.ifpe.bazzar.modelo.Categoria.Categoria;
@@ -9,7 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +26,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Produto extends EntidadeAuditavel {
     
-   @OneToMany(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "categoria_id")
-   private List <Categoria> categorias;
+   private Categoria categoria;
 
    @Column
    private String codigo;
