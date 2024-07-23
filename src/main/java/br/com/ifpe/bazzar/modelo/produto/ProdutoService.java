@@ -22,9 +22,14 @@ public class ProdutoService {
       return repository.save(produto);
    }
 
-   public List<Produto> listarTodos() {
+   public List<Produto> listarTodos(String descricao) {
 
-      return repository.findAll();
+      if(descricao == null){
+         return repository.findAll();
+      }else{
+         return repository.findByCategoriaDescricao(descricao);
+      }
+     
    }
 
    public Produto obterPorID(Long id) {

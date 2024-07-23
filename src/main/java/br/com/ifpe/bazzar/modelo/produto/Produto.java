@@ -2,6 +2,9 @@ package br.com.ifpe.bazzar.modelo.produto;
 
 
 import org.hibernate.annotations.SQLRestriction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.ifpe.bazzar.modelo.Categoria.Categoria;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
@@ -28,6 +31,7 @@ public class Produto extends EntidadeAuditavel {
     
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "categoria_id")
+   @JsonIgnore
    private Categoria categoria;
 
    @Column
