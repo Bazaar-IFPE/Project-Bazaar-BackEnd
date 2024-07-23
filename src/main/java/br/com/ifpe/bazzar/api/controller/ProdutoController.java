@@ -1,6 +1,7 @@
 package br.com.ifpe.bazzar.api.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.bazzar.api.Dto.ProdutoRequest;
-import br.com.ifpe.bazzar.modelo.CategoriaProduto.CategoriaProdutoService;
+import br.com.ifpe.bazzar.modelo.Categoria.Categoria;
+import br.com.ifpe.bazzar.modelo.Categoria.CategoriaProdutoService;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoService;
 import jakarta.validation.Valid;
@@ -34,12 +36,15 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<Produto> save(@RequestBody @Valid ProdutoRequest request) {
+ 
+    Produto produtoNovo = request.build();
+    List<Categoria> categorias = request.getCategorias().stream()
+        .map(categoriaId -> categoriaProdutoService.obterPorId(categoriaId))
+        .collect(Collectors.toList());
 
-       Produto produtoNovo = request.build();
-       produtoNovo.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
-       Produto produto = produtoService.save(produtoNovo);
-       return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
-
+    produtoNovo.setCategorias(categorias);
+    produtoService.save(produtoNovo);
+    return new ResponseEntity<Produto>(HttpStatus.CREATED);
     }
 
    
@@ -56,12 +61,11 @@ public class ProdutoController {
 
    
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> update(@PathVariable("id") Long id, @RequestBody ProdutoRequest request) {
- 
-        Produto produto = request.build();
-        produto.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
-        produtoService.update(id, produto);
-       
+    public ResponseEntity<Produto> update(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid ProdutoRequest request) {
+        
+        produtoService.update(id, request);
         return ResponseEntity.ok().build();
     }
  

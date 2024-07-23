@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.bazzar.api.Dto.CategoriaProdutoRequest;
-import br.com.ifpe.bazzar.modelo.CategoriaProduto.CategoriaProduto;
-import br.com.ifpe.bazzar.modelo.CategoriaProduto.CategoriaProdutoService;
+import br.com.ifpe.bazzar.modelo.Categoria.Categoria;
+import br.com.ifpe.bazzar.modelo.Categoria.CategoriaProdutoService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -31,28 +31,28 @@ public class CategoriaProdutoController {
 
     
     @PostMapping
-    public ResponseEntity<CategoriaProduto> save(@RequestBody @Valid CategoriaProdutoRequest request) {
-       CategoriaProduto categoriaProdutoNovo = request.build();
-       CategoriaProduto categoriaProduto = categoriaProdutoService.save(categoriaProdutoNovo);
-       return new ResponseEntity<CategoriaProduto>(categoriaProduto, HttpStatus.CREATED);
+    public ResponseEntity<Categoria> save(@RequestBody @Valid CategoriaProdutoRequest request) {
+       Categoria categoriaProdutoNovo = request.build();
+       Categoria categoriaProduto = categoriaProdutoService.save(categoriaProdutoNovo);
+       return new ResponseEntity<Categoria>(categoriaProduto, HttpStatus.CREATED);
         
     }
     
     @GetMapping
-    public List<CategoriaProduto> listarTodos(){
+    public List<Categoria> listarTodos(){
         return categoriaProdutoService.listarTodos();
         
     }    
     
     @GetMapping("/{id}")
-    public CategoriaProduto obterPorId(@PathVariable Long id){
+    public Categoria obterPorId(@PathVariable Long id){
         return categoriaProdutoService.obterPorId(id);
 
     }
 
    
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaProduto> update(@PathVariable("id") Long id, @RequestBody CategoriaProdutoRequest request){
+    public ResponseEntity<Categoria> update(@PathVariable("id") Long id, @RequestBody CategoriaProdutoRequest request){
         categoriaProdutoService.update(id,request.build());
         return ResponseEntity.ok().build();
     }

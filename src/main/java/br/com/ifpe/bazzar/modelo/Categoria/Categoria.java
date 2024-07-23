@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.modelo.CategoriaProduto;
+package br.com.ifpe.bazzar.modelo.Categoria;
 
 import org.hibernate.annotations.SQLRestriction;
 
@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="CategoriaProduto")
+@Table(name="Categoria")
 @SQLRestriction("habilitado = true")
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaProduto extends EntidadeAuditavel{
+public class Categoria extends EntidadeAuditavel{
 
     @Column
     private String descricao;

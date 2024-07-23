@@ -1,6 +1,6 @@
 package br.com.ifpe.bazzar.api.Dto;
 
-import br.com.ifpe.bazzar.modelo.CategoriaProduto.CategoriaProduto;
+import br.com.ifpe.bazzar.modelo.Categoria.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +15,8 @@ public class CategoriaProdutoRequest {
     private String descricao;
 
 
-    public CategoriaProduto build(){
-        return CategoriaProduto.builder()
+    public Categoria build(){
+        return Categoria.builder()
             .descricao(descricao)
             .build();
     }

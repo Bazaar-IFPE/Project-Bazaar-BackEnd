@@ -1,5 +1,8 @@
 package br.com.ifpe.bazzar.api.Dto;
 
+import java.util.List;
+
+
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProdutoRequest {
 
- private Long idCategoria;
- 
+ private List<Long> categorias;
 
  private String codigo;
  
