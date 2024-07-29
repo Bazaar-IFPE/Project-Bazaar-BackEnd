@@ -46,4 +46,7 @@ public class Produto extends EntidadeAuditavel {
    @Column
    private Double valorUnitario;
 
+   @Column
+   private String imagemUrl;
+
 }

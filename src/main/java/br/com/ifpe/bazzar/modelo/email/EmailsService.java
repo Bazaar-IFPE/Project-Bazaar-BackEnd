@@ -7,7 +7,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import br.com.ifpe.bazzar.modelo.enums.EmailType;
+
+import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import jakarta.mail.internet.MimeMessage;
 

@@ -1,7 +1,8 @@
 package br.com.ifpe.bazzar.modelo.usuario;
 
 import org.hibernate.annotations.SQLRestriction;
-import br.com.ifpe.bazzar.modelo.enums.UserType;
+
+import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

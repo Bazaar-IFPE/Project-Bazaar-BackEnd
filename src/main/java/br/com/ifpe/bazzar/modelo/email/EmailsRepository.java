@@ -2,7 +2,7 @@ package br.com.ifpe.bazzar.modelo.email;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.ifpe.bazzar.modelo.enums.EmailType;
+import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 
 import java.util.Optional;

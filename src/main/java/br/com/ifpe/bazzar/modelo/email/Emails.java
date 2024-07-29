@@ -3,7 +3,7 @@ package br.com.ifpe.bazzar.modelo.email;
 import java.time.Instant;
 import java.util.UUID;
 
-import br.com.ifpe.bazzar.modelo.enums.EmailType;
+import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

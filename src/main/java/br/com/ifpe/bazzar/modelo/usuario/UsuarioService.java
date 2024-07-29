@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import br.com.ifpe.bazzar.modelo.email.EmailsService;
+import br.com.ifpe.bazzar.enums.EmailType;
+import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.email.Emails;
-import br.com.ifpe.bazzar.modelo.enums.EmailType;
-import br.com.ifpe.bazzar.modelo.enums.UserType;
 import br.com.ifpe.bazzar.modelo.email.EmailsRepository;
 
 

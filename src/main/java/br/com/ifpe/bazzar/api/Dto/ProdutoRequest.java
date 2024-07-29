@@ -1,6 +1,8 @@
 package br.com.ifpe.bazzar.api.Dto;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +27,8 @@ public class ProdutoRequest {
 
    
  private Double valorUnitario;
+
+ private MultipartFile imagem;
 
    public Produto build() {
 
