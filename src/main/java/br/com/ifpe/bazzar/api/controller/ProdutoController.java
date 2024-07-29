@@ -50,7 +50,7 @@ public class ProdutoController {
         @RequestParam("produto") String produtoRequestJson) {
         
         try {
-            // Convertendo o JSON recebido em um objeto ProdutoRequest
+            
             ObjectMapper objectMapper = new ObjectMapper();
             ProdutoRequest request = objectMapper.readValue(produtoRequestJson, ProdutoRequest.class);
 
@@ -61,9 +61,11 @@ public class ProdutoController {
             String imagemUrl = imagemService.uploadImage(imagem);
             produtoNovo.setImagemUrl(imagemUrl);
 
+            
             Produto produto = produtoService.save(produtoNovo);
             return new ResponseEntity<>(produto, HttpStatus.CREATED);
         } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

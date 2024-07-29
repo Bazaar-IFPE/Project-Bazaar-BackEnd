@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class ImagemService {
@@ -24,23 +26,29 @@ public class ImagemService {
         this.bucket = bucket;
     }
 
-    public String uploadImage(MultipartFile file) throws IOException {
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("file", fileName, RequestBody.create(file.getBytes(), MediaType.parse(file.getContentType())))
-                .build();
+   public String uploadImage(MultipartFile file) throws IOException {
+    String fileName = System.currentTimeMillis() + "_" + URLEncoder.encode(file.getOriginalFilename(), StandardCharsets.UTF_8.toString());
+    
+    RequestBody requestBody = new MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", fileName, RequestBody.create(file.getBytes(), MediaType.parse(file.getContentType())))
+            .build();
 
-        Request request = new Request.Builder()
-                .url(supabaseUrl + "/storage/v1/object/" + bucket + "/" + fileName)
-                .header("Authorization", "Bearer " + supabaseKey)
-                .post(requestBody)
-                .build();
+    String url = String.format("%s/storage/v1/object/%s/%s", supabaseUrl, bucket, fileName);
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            // Parse the response and return the public URL of the uploaded file
-            return supabaseUrl + "/storage/v1/object/public/" + bucket + "/" + fileName;
+    Request request = new Request.Builder()
+            .url(url)
+            .header("Authorization", "Bearer " + supabaseKey)
+            .post(requestBody)
+            .build();
+
+    try (Response response = httpClient.newCall(request).execute()) {
+        if (!response.isSuccessful()) {
+            String errorMessage = response.body().string();
+            throw new IOException("Unexpected code " + response + ". Error: " + errorMessage);
         }
+        return supabaseUrl + "/storage/v1/object/public/" + bucket + "/" + fileName;
     }
+}
+    
 }
