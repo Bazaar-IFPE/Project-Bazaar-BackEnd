@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,11 @@ public class UsuarioController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authDto) {
         return ResponseEntity.ok(authService.login(authDto));
+    }
+
+    @GetMapping("/{id}")
+    public Usuario obterPorID(@PathVariable Long id) {
+        return usuarioService.obterPorID(id);
     }
 
     @PostMapping(value = "/register")

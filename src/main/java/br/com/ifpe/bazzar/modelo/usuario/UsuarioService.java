@@ -49,6 +49,11 @@ public class UsuarioService {
         return repository.save(usuario);
     }
 
+    public Usuario obterPorID(Long id) {
+
+        return repository.findById(id).get();
+    }
+
     @Transactional
     public void SendEmail(Usuario usuario, EmailType emailType) {
         
