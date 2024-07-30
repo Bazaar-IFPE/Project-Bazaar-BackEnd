@@ -27,6 +27,12 @@ public class ImagemService {
     }
 
    public String uploadImage(MultipartFile file) throws IOException {
+    
+    String originalFilename = file.getOriginalFilename();
+    if (originalFilename == null || !originalFilename.toLowerCase().endsWith(".jpg")) {
+        throw new IllegalArgumentException("permitimos apenas arquivos .jpg.");
+    }
+    
     String fileName = System.currentTimeMillis() + "_" + URLEncoder.encode(file.getOriginalFilename(), StandardCharsets.UTF_8.toString());
     
     RequestBody requestBody = new MultipartBody.Builder()
