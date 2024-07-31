@@ -126,6 +126,17 @@ public class UsuarioService {
         }
     }
 
+    public boolean isUserActive(String login) {
+        // Obtém o Optional<Usuario>
+        Optional<Usuario> optUsuario = repository.findByLogin(login);
+
+        if(optUsuario.isPresent()){
+            Usuario usuario = optUsuario.get();
+            return UserType.ATIVO.equals(usuario.getSituacao());
+        }else return false;
+        
+    }
+
     public Usuario findByEmail(String email) {
         Optional<Usuario> usuario = repository.findByEmail(email);
         return usuario.orElse(null);

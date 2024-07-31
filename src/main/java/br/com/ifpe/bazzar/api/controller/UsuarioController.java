@@ -63,7 +63,13 @@ public class UsuarioController {
             return renderTemplate(model, "feedback-p", "usuario verificado!");
         }else return null;
 
-    }    
+    }  
+    
+    @GetMapping("/userCondition")
+    public Boolean isUserActive (@RequestParam String login) {
+        return usuarioService.isUserActive(login);
+    }
+    
 
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(@RequestBody PasswordResetRequest email) {
