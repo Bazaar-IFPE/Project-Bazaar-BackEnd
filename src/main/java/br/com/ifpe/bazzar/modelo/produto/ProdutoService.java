@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ProdutoService {
@@ -31,6 +33,12 @@ public class ProdutoService {
       }
      
    }
+
+   public List<Produto> topCincoBaratosPorCategoria (String descricao){
+      Pageable pageable = PageRequest.of(0, 5);
+      return repository.topFiveCheapest(descricao, pageable);
+   }
+
 
    public Produto obterPorID(Long id) {
 

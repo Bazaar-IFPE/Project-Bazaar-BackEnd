@@ -78,6 +78,11 @@ public class ProdutoController {
         return produtoService.listarTodos(descricao);
     }
 
+    @GetMapping("/mais-baratos/{descricao}")
+    public List<Produto> maisBaratos(@PathVariable String descricao) {
+        return produtoService.topCincoBaratosPorCategoria(descricao);
+    }
+    
     
     @GetMapping("/{id}")
     public Produto obterPorID(@PathVariable Long id) {
