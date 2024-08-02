@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 public class AcessRequest {
 
 	private String token;
+	private String login;
 
 	public AcessRequest build(){
 		return AcessRequest.builder()
 				.token(token)
+				.login(login)
 				.build();
 	}
 

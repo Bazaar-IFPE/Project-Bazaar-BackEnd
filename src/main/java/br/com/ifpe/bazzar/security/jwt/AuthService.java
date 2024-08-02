@@ -10,39 +10,38 @@ import org.springframework.stereotype.Service;
 import br.com.ifpe.bazzar.api.Dto.AcessRequest;
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 
-
-
 @Service
 public class AuthService {
 
-	@Autowired
-	private AuthenticationManager authenticatioManager;
-	
-	@Autowired
-	private JwtUtils jwtUtils;
-	
-	public AcessRequest login(AuthenticationRequest authDto) {
-		
-		try {
-		//Cria mecanismo de credencial para o spring
-		UsernamePasswordAuthenticationToken userAuth = 
-				new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword());
-		
-		//Prepara mecanismo para autenticacao
-		Authentication authentication = authenticatioManager.authenticate(userAuth);
-		
-		//Busca usuario logado
-		UserDetailsImpl userAuthenticate = (UserDetailsImpl)authentication.getPrincipal();
-		
-		String token = jwtUtils.generateTokenFromUserDetailsImpl(userAuthenticate);
-		
-		AcessRequest accessRequest = new AcessRequest(token);
-		
-		return accessRequest;
-		
-		}catch(BadCredentialsException e) {
-			
-		}
-		return new AcessRequest("Acesso negado");
-	}
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    public AcessRequest login(AuthenticationRequest authDto) {
+
+        try {
+            // Cria mecanismo de credencial para o spring
+            UsernamePasswordAuthenticationToken userAuth =
+                    new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword());
+
+            // Prepara mecanismo para autenticacao
+            Authentication authentication = authenticationManager.authenticate(userAuth);
+
+            // Busca usuario logado
+            UserDetailsImpl userAuthenticate = (UserDetailsImpl) authentication.getPrincipal();
+
+            String token = jwtUtils.generateTokenFromUserDetailsImpl(userAuthenticate);
+
+            AcessRequest accessRequest = new AcessRequest(token, userAuthenticate.getUsername());
+
+            return accessRequest;
+
+        } catch (BadCredentialsException e) {
+            return new AcessRequest("Acesso negado", null);
+        }
+    }
 }
+
+
