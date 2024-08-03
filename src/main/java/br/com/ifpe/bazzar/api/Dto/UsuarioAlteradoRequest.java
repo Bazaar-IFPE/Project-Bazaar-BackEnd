@@ -1,6 +1,5 @@
 package br.com.ifpe.bazzar.api.Dto;
 
-
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,17 +10,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioRequest {
+public class UsuarioAlteradoRequest {
 
     private String nomeCompleto;
 
     private String email;
 
     private String login;
-
-    private String senha;
-
-    private String cpf;
 
     private String numeroTelefone;
 
@@ -33,8 +28,6 @@ public class UsuarioRequest {
                 .nomeCompleto(nomeCompleto)
                 .email(email)
                 .login(login)
-                .senha(senha)
-                .cpf(cpf)
                 .numeroTelefone(numeroTelefone)
                 .build();
     }

@@ -39,6 +39,16 @@ public class UsuarioService {
 
 
     @Transactional
+    public Usuario save(Usuario usuario) {
+        
+        Usuario savedUsuario = saveUser(usuario);
+        SendEmail(savedUsuario, EmailType.VERIFICATION);
+        
+        logger.info("Save process completed for user ID: {}", savedUsuario.getId());
+        return savedUsuario;
+    }
+
+    @Transactional
     public Usuario saveUser(Usuario usuario) {
 
         usuario.setHabilitado(Boolean.TRUE);
@@ -48,10 +58,30 @@ public class UsuarioService {
         usuario.setSituacao(UserType.PENDENTE);
         return repository.save(usuario);
     }
-
+    @Transactional
     public Usuario obterPorID(Long id) {
 
         return repository.findById(id).get();
+    }
+
+    @Transactional
+    public void update(Long id, Usuario usuarioAlterado){
+        Usuario usuario = repository.findById(id).get();
+        usuario.setNomeCompleto(usuarioAlterado.getNomeCompleto());
+        usuario.setLogin(usuarioAlterado.getLogin());
+        usuario.setEmail(usuarioAlterado.getEmail());
+        usuario.setNumeroTelefone(usuarioAlterado.getNumeroTelefone());
+        usuario.setVersao(usuario.getVersao()+1);
+        repository.save(usuario);
+    }
+
+    @Transactional
+    public void delete(Long id){
+        Usuario usuario = repository.findById(id).get();
+        usuario.setHabilitado(Boolean.FALSE);
+        usuario.setVersao(usuario.getVersao()+1);
+
+        repository.save(usuario);
     }
 
     @Transactional
@@ -76,16 +106,8 @@ public class UsuarioService {
         }
     }
 
+   
     @Transactional
-    public Usuario save(Usuario usuario) {
-        
-        Usuario savedUsuario = saveUser(usuario);
-        SendEmail(savedUsuario, EmailType.VERIFICATION);
-        
-        logger.info("Save process completed for user ID: {}", savedUsuario.getId());
-        return savedUsuario;
-    }
-
     public String verificarCadastro(String uuid) {
         Emails emailVerification = emailRepository.findByUuid(UUID.fromString(uuid));
 
@@ -103,7 +125,7 @@ public class UsuarioService {
             return "Usuário não verificado";
         }
     }
-
+    @Transactional
     public String resetPassword(String token, String newPassword, String confirmPassword) {
 
         if (!newPassword.equals(confirmPassword)) {
@@ -125,7 +147,7 @@ public class UsuarioService {
             }
         }
     }
-
+    @Transactional
     public boolean isUserActive(String login) {
         // Obtém o Optional<Usuario>
         Optional<Usuario> optUsuario = repository.findByLogin(login);
@@ -136,12 +158,12 @@ public class UsuarioService {
         }else return false;
         
     }
-
+    @Transactional
     public Usuario findByEmail(String email) {
         Optional<Usuario> usuario = repository.findByEmail(email);
         return usuario.orElse(null);
     }
-
+    @Transactional
     public void sendPasswordReset(Usuario usuario) {
         SendEmail(usuario, EmailType.PASSWORD_RESET);
     }
