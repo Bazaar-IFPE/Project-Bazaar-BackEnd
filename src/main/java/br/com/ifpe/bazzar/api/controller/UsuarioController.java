@@ -1,6 +1,8 @@
 package br.com.ifpe.bazzar.api.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,7 @@ import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
+import br.com.ifpe.bazzar.api.Dto.UsuarioAlteradoRequest;
 import br.com.ifpe.bazzar.api.Dto.UsuarioRequest;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
@@ -47,6 +51,11 @@ public class UsuarioController {
         return usuarioService.obterPorID(id);
     }
 
+    @GetMapping
+    public List<Usuario> buscarTodos(){
+        return usuarioService.findAll();
+    }
+
     @PostMapping(value = "/register")
     public ResponseEntity<Usuario> inserirNovoUsuario(@RequestBody UsuarioRequest request) {
 
@@ -68,6 +77,12 @@ public class UsuarioController {
     @GetMapping("/userCondition")
     public Boolean isUserActive (@RequestParam String login) {
         return usuarioService.isUserActive(login);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<String> editUser(@PathVariable Long id, @RequestBody UsuarioAlteradoRequest request) {
+        usuarioService.update(id, request.build());
+        return  ResponseEntity.ok("Usuario alterado com sucesso.");
     }
     
 

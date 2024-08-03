@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import br.com.ifpe.bazzar.modelo.email.EmailsService;
+import br.com.ifpe.bazzar.api.Dto.UsuarioAlteradoRequest;
 import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.email.Emails;
@@ -65,14 +67,26 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void update(Long id, Usuario usuarioAlterado){
-        Usuario usuario = repository.findById(id).get();
-        usuario.setNomeCompleto(usuarioAlterado.getNomeCompleto());
-        usuario.setLogin(usuarioAlterado.getLogin());
-        usuario.setEmail(usuarioAlterado.getEmail());
-        usuario.setNumeroTelefone(usuarioAlterado.getNumeroTelefone());
-        usuario.setVersao(usuario.getVersao()+1);
-        repository.save(usuario);
+    public List<Usuario> findAll(){
+         return repository.findAll();
+    }
+
+    @Transactional
+    public void update(Long id, UsuarioAlteradoRequest usuarioAlterado){
+
+        if(!usuarioAlterado.getNovaSenha().equals(usuarioAlterado.getConfirmaSenha())){
+            System.out.println("As senhas não coincidem");
+        }else{
+            
+            Usuario usuario = repository.findById(id).get();
+            usuario.setNomeCompleto(usuarioAlterado.getNomeCompleto());
+            usuario.setNumeroTelefone(usuarioAlterado.getNumeroTelefone());
+            usuario.setSenha(passwordEncoder.encode(usuarioAlterado.getNovaSenha()));
+            usuario.setVersao(usuario.getVersao()+1);
+            repository.save(usuario);
+        }
+
+        
     }
 
     @Transactional
