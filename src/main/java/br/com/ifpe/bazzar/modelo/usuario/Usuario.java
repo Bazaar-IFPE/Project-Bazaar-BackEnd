@@ -26,6 +26,9 @@ import lombok.Setter;
 public class Usuario extends EntidadeAuditavel  {
     
     @Column
+    private String imagemUrl;
+
+    @Column
     private Long id;
     
     @Column(nullable = false)

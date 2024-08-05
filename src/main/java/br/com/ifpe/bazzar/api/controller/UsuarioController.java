@@ -16,13 +16,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
 import br.com.ifpe.bazzar.api.Dto.UsuarioAlteradoRequest;
 import br.com.ifpe.bazzar.api.Dto.UsuarioRequest;
+import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 import br.com.ifpe.bazzar.security.jwt.AuthService;
@@ -37,6 +42,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private ImagemService imagemService;
 
     @Autowired
     private SpringTemplateEngine templateEngine;
@@ -80,10 +88,25 @@ public class UsuarioController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<String> editUser(@PathVariable Long id, @RequestBody UsuarioAlteradoRequest request) {
-        usuarioService.update(id, request.build());
-        return  ResponseEntity.ok("Usuario alterado com sucesso.");
+    public ResponseEntity<String> editUser(@PathVariable("id") Long id, 
+                                       @RequestParam("imagem") MultipartFile imagem, 
+                                       @RequestParam("usuario") String usuarioAlteradoRequestJson) {
+    try {
+        ObjectMapper objectMapper = new ObjectMapper();
+        UsuarioAlteradoRequest usuarioAlteradoRequest = objectMapper.readValue(usuarioAlteradoRequestJson, UsuarioAlteradoRequest.class);
+
+        String imagemUrl = imagemService.uploadImage(imagem);
+        usuarioAlteradoRequest.setImagemUrl(imagemUrl);
+
+        usuarioService.update(id, usuarioAlteradoRequest);
+
+        return ResponseEntity.ok("Usuario alterado com sucesso.");
+    } catch (Exception e) {
+        System.err.println("Error: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+}
+
     
 
     @PostMapping("/redefinir-senha")
