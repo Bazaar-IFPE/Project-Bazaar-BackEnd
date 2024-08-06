@@ -13,11 +13,13 @@ public class AcessRequest {
 
 	private String token;
 	private String login;
+	private Long userId;
 
 	public AcessRequest build(){
 		return AcessRequest.builder()
 				.token(token)
 				.login(login)
+				.userId(userId)
 				.build();
 	}
 

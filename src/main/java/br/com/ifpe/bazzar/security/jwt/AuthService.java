@@ -34,12 +34,12 @@ public class AuthService {
 
             String token = jwtUtils.generateTokenFromUserDetailsImpl(userAuthenticate);
 
-            AcessRequest accessRequest = new AcessRequest(token, userAuthenticate.getUsername());
+            AcessRequest accessRequest = new AcessRequest(token, userAuthenticate.getUsername(), userAuthenticate.getId());
 
             return accessRequest;
 
         } catch (BadCredentialsException e) {
-            return new AcessRequest("Acesso negado", null);
+            return new AcessRequest("Acesso negado", null, null);
         }
     }
 }
