@@ -1,9 +1,7 @@
 package br.com.ifpe.bazzar.api.controller;
 
-
 import java.io.IOException;
 import java.util.List;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,20 +35,19 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-     @Autowired
-    private ImagemService imagemService; 
+    @Autowired
+    private ImagemService imagemService;
 
     @Autowired
     private CategoriaProdutoService categoriaProdutoService;
 
-
     @PostMapping
     public ResponseEntity<Produto> save(
-        @RequestParam("imagem") MultipartFile imagem, 
-        @RequestParam("produto") String produtoRequestJson) {
-        
+            @RequestParam("imagem") MultipartFile imagem,
+            @RequestParam("produto") String produtoRequestJson) {
+
         try {
-            
+
             ObjectMapper objectMapper = new ObjectMapper();
             ProdutoRequest request = objectMapper.readValue(produtoRequestJson, ProdutoRequest.class);
 
@@ -61,7 +58,6 @@ public class ProdutoController {
             String imagemUrl = imagemService.uploadImage(imagem);
             produtoNovo.setImagemUrl(imagemUrl);
 
-            
             Produto produto = produtoService.save(produtoNovo);
             return new ResponseEntity<>(produto, HttpStatus.CREATED);
         } catch (IOException e) {
@@ -69,12 +65,9 @@ public class ProdutoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    
 
-
-   
     @GetMapping
-    public List<Produto> listarTodos(@RequestParam(value="descricao", required = false)String descricao) {
+    public List<Produto> listarTodos(@RequestParam(value = "descricao", required = false) String descricao) {
         return produtoService.listarTodos(descricao);
     }
 
@@ -82,30 +75,26 @@ public class ProdutoController {
     public List<Produto> maisBaratos(@PathVariable String descricao) {
         return produtoService.topCincoBaratosPorCategoria(descricao);
     }
-    
-    
+
     @GetMapping("/{id}")
     public Produto obterPorID(@PathVariable Long id) {
         return produtoService.obterPorID(id);
     }
 
-   
     @PutMapping("/{id}")
     public ResponseEntity<Produto> update(
             @PathVariable("id") Long id,
             @RequestBody @Valid ProdutoRequest request) {
 
-                Produto produto = request.build();
-                produto.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
-                produtoService.update(id, produto);
-               
-                return ResponseEntity.ok().build();
-    }
- 
+        Produto produto = request.build();
+        produto.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
+        produtoService.update(id, produto);
 
-   
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         produtoService.delete(id);
         return ResponseEntity.ok().build();
     }
