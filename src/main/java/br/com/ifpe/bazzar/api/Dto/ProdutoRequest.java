@@ -19,13 +19,10 @@ public class ProdutoRequest {
 
  private String codigo;
  
-
  private String titulo;
 
-   
  private String descricao;
 
-   
  private Double valorUnitario;
 
  private MultipartFile imagem;

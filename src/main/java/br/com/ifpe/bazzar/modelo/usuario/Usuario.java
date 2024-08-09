@@ -1,8 +1,10 @@
 package br.com.ifpe.bazzar.modelo.usuario;
 
-import org.hibernate.annotations.SQLRestriction;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.SQLRestriction;
 
 import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
@@ -12,7 +14,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -55,10 +56,9 @@ public class Usuario extends EntidadeAuditavel {
     @Column(nullable = false)
     private String numeroTelefone;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "endereco_id")
-    @JsonIgnore
-    private Endereco endereco;
+    @OneToMany(mappedBy ="usuario", orphanRemoval = true ,fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Endereco> endereco;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

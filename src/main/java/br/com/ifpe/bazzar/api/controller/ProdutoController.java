@@ -54,7 +54,6 @@ public class ProdutoController {
             Produto produtoNovo = request.build();
             produtoNovo.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
 
-            // Upload da imagem e atribuição da URL
             String imagemUrl = imagemService.uploadImage(imagem);
             produtoNovo.setImagemUrl(imagemUrl);
 
