@@ -45,9 +45,7 @@ public class ProdutoController {
     public ResponseEntity<Produto> save(
             @RequestParam("imagem") MultipartFile imagem,
             @RequestParam("produto") String produtoRequestJson) {
-
         try {
-
             ObjectMapper objectMapper = new ObjectMapper();
             ProdutoRequest request = objectMapper.readValue(produtoRequestJson, ProdutoRequest.class);
 

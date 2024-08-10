@@ -1,11 +1,9 @@
 package br.com.ifpe.bazzar.modelo.usuario;
 
 import java.util.List;
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SQLRestriction;
-
 import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;

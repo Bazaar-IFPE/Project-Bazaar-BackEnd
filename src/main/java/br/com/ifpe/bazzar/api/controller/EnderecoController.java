@@ -24,26 +24,26 @@ public class EnderecoController {
     @Autowired
     private EnderecoService enderecoService;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Endereco> save( @PathVariable("id") Long id ,@RequestBody EnderecoRequest request) {
-        enderecoService.save(id,request.build());
+    @PostMapping("/{idUser}")
+    public ResponseEntity<Endereco> save( @PathVariable("idUser") Long idUser ,@RequestBody EnderecoRequest request) {
+        enderecoService.save(idUser,request.build());
         return new ResponseEntity<Endereco>(HttpStatus.CREATED);
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Endereco> update(@PathVariable("id") long id, EnderecoRequest request) {
+    @PutMapping("/{idEndereco}")
+    public ResponseEntity<Endereco> update(@PathVariable("idEndereco") long idEndereco, EnderecoRequest request) {
 
         Endereco endereco = request.build();
-        enderecoService.update(id, endereco);
+        enderecoService.update(idEndereco, endereco);
 
         return ResponseEntity.ok().build();
 
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        enderecoService.delete(id);
+    @DeleteMapping("/{idEndereco}")
+    public ResponseEntity<Void> delete(@PathVariable Long idEndereco){
+        enderecoService.delete(idEndereco);
         return ResponseEntity.ok().build();
     }
 
