@@ -41,8 +41,8 @@ public class ProdutoController {
     @Autowired
     private CategoriaProdutoService categoriaProdutoService;
 
-    @PostMapping
-    public ResponseEntity<Produto> save(
+    @PostMapping("/{idUser}")
+    public ResponseEntity<Produto> save(@PathVariable("idUser")Long idUser,
             @RequestParam("imagem") MultipartFile imagem,
             @RequestParam("produto") String produtoRequestJson) {
         try {
@@ -55,7 +55,7 @@ public class ProdutoController {
             String imagemUrl = imagemService.uploadImage(imagem);
             produtoNovo.setImagemUrl(imagemUrl);
 
-            Produto produto = produtoService.save(produtoNovo);
+            Produto produto = produtoService.save(idUser,produtoNovo);
             return new ResponseEntity<>(produto, HttpStatus.CREATED);
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());

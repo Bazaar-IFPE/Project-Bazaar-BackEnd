@@ -1,11 +1,15 @@
 package br.com.ifpe.bazzar.modelo.produto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import br.com.ifpe.bazzar.modelo.usuario.Usuario;
+import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
@@ -15,33 +19,32 @@ public class ProdutoService {
    @Autowired
    private ProdutoRepository repository;
 
-   @Transactional
-   public Produto save(Produto produto) {
+   @Autowired
+   private UsuarioRepository userRepository;
 
+   //métodos produtos relacionados com usuario 
+   @Transactional
+   public Produto save(Long userId, Produto produto) {
+
+      Usuario usuario = userRepository.findById(userId).get();
+      produto.setUsuario(usuario);
       produto.setHabilitado(Boolean.TRUE);
       produto.setVersao(1L);
       produto.setDataCriacao(LocalDate.now());
-      return repository.save(produto);
-   }
+      repository.save(produto);
 
-   public List<Produto> listarTodos(String descricao) {
+      List<Produto> listaProdutos = usuario.getProdutos();
 
-      if (descricao == null) {
-         return repository.findAll();
-      } else {
-         return repository.findByCategoriaDescricao(descricao);
+      if (listaProdutos == null) {
+         listaProdutos = new ArrayList<Produto>();
       }
 
-   }
+      listaProdutos.add(produto);
+      usuario.setProdutos(listaProdutos);
+      usuario.setVersao(usuario.getVersao()+1);
+      userRepository.save(usuario);
 
-   public List<Produto> topCincoBaratosPorCategoria(String descricao) {
-      Pageable pageable = PageRequest.of(0, 5);
-      return repository.topFiveCheapest(descricao, pageable);
-   }
-
-   public Produto obterPorID(Long id) {
-
-      return repository.findById(id).get();
+      return produto;
    }
 
    @Transactional
@@ -63,8 +66,35 @@ public class ProdutoService {
       Produto produto = repository.findById(id).get();
       produto.setHabilitado(Boolean.FALSE);
       produto.setVersao(produto.getVersao() + 1);
-
       repository.save(produto);
+
+      Usuario usuario = userRepository.findById(produto.getUsuario().getId())
+      .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+      usuario.getProdutos().remove(produto);
+      usuario.setVersao(usuario.getVersao()+1);
+      userRepository.save(usuario);
    }
+
+   //métodos para produtos em geral
+
+   public List<Produto> listarTodos(String descricao) {
+
+      if (descricao == null) {
+         return repository.findAll();
+      }else {
+         return repository.findByCategoriaDescricao(descricao);
+      }
+   }
+
+   public List<Produto> topCincoBaratosPorCategoria(String descricao) {
+      Pageable pageable = PageRequest.of(0, 5);
+      return repository.topFiveCheapest(descricao, pageable);
+   }
+
+   public Produto obterPorID(Long id) {
+
+      return repository.findById(id).get();
+   }
+
 
 }

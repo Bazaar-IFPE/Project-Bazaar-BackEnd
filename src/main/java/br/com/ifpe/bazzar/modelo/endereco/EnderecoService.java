@@ -21,7 +21,7 @@ public class EnderecoService {
     private UsuarioRepository userRepository;
 
     @Transactional
-    public Endereco save(Long userId ,Endereco endereco){
+    public Endereco save(Long userId, Endereco endereco){
         //buscando usuario e salvando no endereço
         Usuario usuario = userRepository.findById(userId).get();
         endereco.setUsuario(usuario);
@@ -29,14 +29,14 @@ public class EnderecoService {
         repository.save(endereco);
 
         //acrecentando endereço criado a lista de endereços no usuario
-        List<Endereco> listaEnderecos = usuario.getEndereco();
+        List<Endereco> listaEnderecos = usuario.getEnderecos();
 
         if(listaEnderecos == null){
             listaEnderecos = new ArrayList<Endereco>();
         }
 
         listaEnderecos.add(endereco);
-        usuario.setEndereco(listaEnderecos);
+        usuario.setEnderecos(listaEnderecos);
         usuario.setVersao(usuario.getVersao()+1);
         userRepository.save(usuario);
 
@@ -68,7 +68,7 @@ public class EnderecoService {
 
         Usuario usuario = userRepository.findById(endereco.getUsuario().getId())
         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        usuario.getEndereco().remove(endereco);
+        usuario.getEnderecos().remove(endereco);
         usuario.setVersao(usuario.getVersao()+1);
         userRepository.save(usuario);
 
