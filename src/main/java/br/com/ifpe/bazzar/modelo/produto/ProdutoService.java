@@ -22,7 +22,7 @@ public class ProdutoService {
    @Autowired
    private UsuarioRepository userRepository;
 
-   //métodos produtos relacionados com usuario 
+   //métodos para  produtos relacionados com usuario 
    @Transactional
    public Produto save(Long userId, Produto produto) {
 
@@ -94,6 +94,11 @@ public class ProdutoService {
    public Produto obterPorID(Long id) {
 
       return repository.findById(id).get();
+   }
+
+   public List<Produto> search(String produto){
+
+      return repository.search(produto);
    }
 
 

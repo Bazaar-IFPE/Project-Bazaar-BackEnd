@@ -78,6 +78,11 @@ public class ProdutoController {
         return produtoService.obterPorID(id);
     }
 
+    @GetMapping("/search/{produto}")
+    public List<Produto> search(@PathVariable String produto){
+        return produtoService.search(produto);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Produto> update(
             @PathVariable("id") Long id,
