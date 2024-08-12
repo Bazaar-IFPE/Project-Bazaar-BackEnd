@@ -1,6 +1,4 @@
 package br.com.ifpe.bazzar.api.controller;
-
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,7 @@ import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
 import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
 import br.com.ifpe.bazzar.api.Dto.UsuarioAlteradoRequest;
 import br.com.ifpe.bazzar.api.Dto.UsuarioRequest;
+import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
@@ -64,8 +63,8 @@ public class UsuarioController {
         return usuarioService.findAll();
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<Usuario> inserirNovoUsuario(@RequestBody UsuarioRequest request) {
+    @PostMapping
+    public ResponseEntity<Usuario> save(@RequestBody UsuarioRequest request) {
 
         usuarioService.save(request.build());
         return new ResponseEntity<Usuario>(HttpStatus.CREATED);
@@ -107,15 +106,13 @@ public class UsuarioController {
     }
 }
 
-    
-
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(@RequestBody PasswordResetRequest email) {
 
     Usuario usuario = usuarioService.findByEmail(email.getEmail());
 
     if (usuario != null) {
-        usuarioService.sendPasswordReset(usuario);
+        usuarioService.SendEmail(usuario, EmailType.PASSWORD_RESET);
         return ResponseEntity.ok("Email de redefinição de senha enviado.");
     } else {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");

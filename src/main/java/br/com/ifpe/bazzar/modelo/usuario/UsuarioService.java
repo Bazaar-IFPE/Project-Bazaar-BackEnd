@@ -42,27 +42,21 @@ public class UsuarioService {
 
     @Transactional
     public Usuario save(Usuario usuario) {
-        
-        Usuario savedUsuario = saveUser(usuario);
-        SendEmail(savedUsuario, EmailType.VERIFICATION);
-        
-        logger.info("Save process completed for user ID: {}", savedUsuario.getId());
-        return savedUsuario;
-    }
-
-    @Transactional
-    public Usuario saveUser(Usuario usuario) {
-
+    
         usuario.setHabilitado(Boolean.TRUE);
         usuario.setVersao(1L);
         usuario.setDataCriacao(LocalDate.now());
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuario.setSituacao(UserType.PENDENTE);
-        return repository.save(usuario);
+    
+        Usuario savedUsuario = repository.save(usuario);
+        SendEmail(savedUsuario, EmailType.VERIFICATION);
+        
+        return savedUsuario;
     }
+
     @Transactional
     public Usuario obterPorID(Long id) {
-
         return repository.findById(id).get();
     }
 
@@ -75,6 +69,9 @@ public class UsuarioService {
     public void update(Long id, UsuarioAlteradoRequest usuarioAlterado){
 
         if(!usuarioAlterado.getNovaSenha().equals(usuarioAlterado.getConfirmaSenha())){
+
+            //TODO: CRIAR EXEPTION 
+
             System.out.println("As senhas não coincidem");
         }else{
             
@@ -86,8 +83,6 @@ public class UsuarioService {
             usuario.setVersao(usuario.getVersao()+1);
             repository.save(usuario);
         }
-
-        
     }
 
     @Transactional
@@ -109,7 +104,6 @@ public class UsuarioService {
         emails.setExpirationDate(Instant.now().plusMillis(900000));
         emailRepository.save(emails);
 
-
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("token", emails.getUuid());
         parameters.put("usuario", usuario);
@@ -117,6 +111,8 @@ public class UsuarioService {
         try {
             emailService.enviarEmail(emailType, usuario.getEmail(), parameters, usuario);
         } catch (Exception e) {
+
+            //TODO: CRIAR EXEPTION 
             logger.error("Error sending email: {}", e.getMessage(), e);
         }
     }
@@ -125,6 +121,8 @@ public class UsuarioService {
     @Transactional
     public String verificarCadastro(String uuid) {
         Emails emailVerification = emailRepository.findByUuid(UUID.fromString(uuid));
+
+        //TODO: CRIAR EXEPTION 
 
         if (emailVerification != null) {
             if (emailVerification.getExpirationDate().compareTo(Instant.now()) >= 0) {
@@ -142,6 +140,8 @@ public class UsuarioService {
     }
     @Transactional
     public String resetPassword(String token, String newPassword, String confirmPassword) {
+
+        //TODO: CRIAR EXEPTION 
 
         if (!newPassword.equals(confirmPassword)) {
             return "no-match";
@@ -164,7 +164,7 @@ public class UsuarioService {
     }
     @Transactional
     public boolean isUserActive(String login) {
-        // Obtém o Optional<Usuario>
+        //TODO: CRIAR EXEPTION 
         Optional<Usuario> optUsuario = repository.findByLogin(login);
 
         if(optUsuario.isPresent()){
@@ -178,10 +178,5 @@ public class UsuarioService {
         Optional<Usuario> usuario = repository.findByEmail(email);
         return usuario.orElse(null);
     }
-    @Transactional
-    public void sendPasswordReset(Usuario usuario) {
-        SendEmail(usuario, EmailType.PASSWORD_RESET);
-    }
 
-   
 }
