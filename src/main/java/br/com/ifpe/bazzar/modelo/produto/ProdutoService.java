@@ -100,6 +100,13 @@ public class ProdutoService {
 
       return repository.search(produto);
    }
+  
+   public List<Produto> ProdutoUsuario(Long id){
+     Usuario usuario = userRepository.findById(id).get();
+     return usuario.getProdutos();
+   }
+
+
 
 
 }
