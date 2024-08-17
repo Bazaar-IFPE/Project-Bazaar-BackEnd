@@ -21,7 +21,6 @@ import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.email.Emails;
 import br.com.ifpe.bazzar.modelo.email.EmailsRepository;
 
-
 @Service
 public class UsuarioService {
 
@@ -39,19 +38,18 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Transactional
     public Usuario save(Usuario usuario) {
-    
+
         usuario.setHabilitado(Boolean.TRUE);
         usuario.setVersao(1L);
         usuario.setDataCriacao(LocalDate.now());
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuario.setSituacao(UserType.PENDENTE);
-    
+
         Usuario savedUsuario = repository.save(usuario);
         SendEmail(savedUsuario, EmailType.VERIFICATION);
-        
+
         return savedUsuario;
     }
 
@@ -61,42 +59,41 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<Usuario> findAll(){
-         return repository.findAll();
+    public List<Usuario> findAll() {
+        return repository.findAll();
     }
 
     @Transactional
-    public void update(Long id, UsuarioAlteradoRequest usuarioAlterado){
+    public void update(Long id, UsuarioAlteradoRequest usuarioAlterado) {
 
-        if(!usuarioAlterado.getNovaSenha().equals(usuarioAlterado.getConfirmaSenha())){
-
-            //TODO: CRIAR EXEPTION 
+        if (!usuarioAlterado.getNovaSenha().equals(usuarioAlterado.getConfirmaSenha())) {
+            // TODO: CRIAR EXEPTION
 
             System.out.println("As senhas não coincidem");
-        }else{
-            
+        } else {
+
             Usuario usuario = repository.findById(id).get();
             usuario.setNomeCompleto(usuarioAlterado.getNomeCompleto());
             usuario.setNumeroTelefone(usuarioAlterado.getNumeroTelefone());
             usuario.setImagemUrl(usuarioAlterado.getImagemUrl());
             usuario.setSenha(passwordEncoder.encode(usuarioAlterado.getNovaSenha()));
-            usuario.setVersao(usuario.getVersao()+1);
+            usuario.setVersao(usuario.getVersao() + 1);
             repository.save(usuario);
         }
     }
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Long id) {
         Usuario usuario = repository.findById(id).get();
         usuario.setHabilitado(Boolean.FALSE);
-        usuario.setVersao(usuario.getVersao()+1);
+        usuario.setVersao(usuario.getVersao() + 1);
 
         repository.save(usuario);
     }
 
     @Transactional
     public void SendEmail(Usuario usuario, EmailType emailType) {
-        
+
         Emails emails = new Emails();
         emails.setUsuario(usuario);
         emails.setEmailType(emailType);
@@ -112,17 +109,16 @@ public class UsuarioService {
             emailService.enviarEmail(emailType, usuario.getEmail(), parameters, usuario);
         } catch (Exception e) {
 
-            //TODO: CRIAR EXEPTION 
+            // TODO: CRIAR EXEPTION
             logger.error("Error sending email: {}", e.getMessage(), e);
         }
     }
 
-   
     @Transactional
     public String verificarCadastro(String uuid) {
         Emails emailVerification = emailRepository.findByUuid(UUID.fromString(uuid));
 
-        //TODO: CRIAR EXEPTION 
+        // TODO: CRIAR EXEPTION
 
         if (emailVerification != null) {
             if (emailVerification.getExpirationDate().compareTo(Instant.now()) >= 0) {
@@ -138,14 +134,15 @@ public class UsuarioService {
             return "Usuário não verificado";
         }
     }
+
     @Transactional
     public String resetPassword(String token, String newPassword, String confirmPassword) {
 
-        //TODO: CRIAR EXEPTION 
+        // TODO: CRIAR EXEPTION
 
         if (!newPassword.equals(confirmPassword)) {
             return "no-match";
-        }else{
+        } else {
             Emails emailPassword = emailRepository.findByUuid(UUID.fromString(token));
 
             if (emailPassword != null) {
@@ -162,17 +159,20 @@ public class UsuarioService {
             }
         }
     }
+
     @Transactional
     public boolean isUserActive(String login) {
-        //TODO: CRIAR EXEPTION 
+        // TODO: CRIAR EXEPTION
         Optional<Usuario> optUsuario = repository.findByLogin(login);
 
-        if(optUsuario.isPresent()){
+        if (optUsuario.isPresent()) {
             Usuario usuario = optUsuario.get();
             return UserType.ATIVO.equals(usuario.getSituacao());
-        }else return false;
-        
+        } else
+            return false;
+
     }
+
     @Transactional
     public Usuario findByEmail(String email) {
         Optional<Usuario> usuario = repository.findByEmail(email);

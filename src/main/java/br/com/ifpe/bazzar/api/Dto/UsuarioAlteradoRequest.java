@@ -1,6 +1,5 @@
 package br.com.ifpe.bazzar.api.Dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,11 +21,10 @@ public class UsuarioAlteradoRequest {
 
     private String imagemUrl;
 
-
     public UsuarioAlteradoRequest build() {
 
         return UsuarioAlteradoRequest.builder()
-        
+
                 .nomeCompleto(nomeCompleto)
                 .numeroTelefone(numeroTelefone)
                 .confirmaSenha(confirmaSenha)
