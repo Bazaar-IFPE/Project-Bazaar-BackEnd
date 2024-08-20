@@ -1,4 +1,5 @@
 package br.com.ifpe.bazzar.api.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -63,7 +65,7 @@ public class UsuarioController {
 
     @Operation(summary = "search all users.", description = "Serviço para buscar todos os usuarios.")
     @GetMapping
-    public List<Usuario> buscarTodos(){
+    public List<Usuario> buscarTodos() {
         return usuarioService.findAll();
     }
 
@@ -78,60 +80,67 @@ public class UsuarioController {
     @Operation(summary = "check registration.", description = "Serviço para verificar o cadastro de um usuario.")
     @GetMapping(value = "/checkRegistration")
     public String verificarCadastro(@RequestParam("uuid") String uuid, Model model) {
-        
-        String result= usuarioService.verificarCadastro(uuid);
+
+        String result = usuarioService.verificarCadastro(uuid);
 
         if ("Verificado".equals(result)) {
             return renderTemplate(model, "feedback-p", "usuario verificado!");
-        }else return null;
+        } else
+            return null;
 
-    }  
-    
+    }
+
     @Operation(summary = "check condition.", description = "Serviço para verificar a condição do usuario.")
     @GetMapping("/userCondition")
-    public Boolean isUserActive (@RequestParam String login) {
+    public Boolean isUserActive(@RequestParam String login) {
         return usuarioService.isUserActive(login);
     }
-    
+
     @Operation(summary = "update a user.", description = "Serviço para atualizar um usuario.")
     @PutMapping("/{id}")
-    public ResponseEntity<String> editUser(@PathVariable("id") Long id, 
-                                       @RequestParam("imagem") MultipartFile imagem, 
-                                       @RequestParam("usuario") String usuarioAlteradoRequestJson) {
-    try {
-        ObjectMapper objectMapper = new ObjectMapper();
-        UsuarioAlteradoRequest usuarioAlteradoRequest = objectMapper.readValue(usuarioAlteradoRequestJson, UsuarioAlteradoRequest.class);
+    public ResponseEntity<String> editUser(@PathVariable("id") Long id,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
+            @RequestPart(value = "usuario", required = false) String usuarioAlteradoRequestJson) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            UsuarioAlteradoRequest usuarioAlteradoRequest = objectMapper.readValue(usuarioAlteradoRequestJson,
+                    UsuarioAlteradoRequest.class);
 
-        String imagemUrl = imagemService.uploadImage(imagem);
-        usuarioAlteradoRequest.setImagemUrl(imagemUrl);
+            Usuario usuarioAtual = usuarioService.obterPorID(id);
+            if (imagem != null && !imagem.isEmpty()) {
+                String imagemUrl = imagemService.uploadImage(imagem);
+                usuarioAlteradoRequest.setImagemUrl(imagemUrl);
+            } else {
+                usuarioAlteradoRequest.setImagemUrl(usuarioAtual.getImagemUrl());
+            }
 
-        usuarioService.update(id, usuarioAlteradoRequest);
+            usuarioService.update(id, usuarioAlteradoRequest);
 
-        return ResponseEntity.ok("Usuario alterado com sucesso.");
-    } catch (Exception e) {
-        System.err.println("Error: " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.ok("Usuario alterado com sucesso.");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
-}
 
     @Operation(summary = "request password change.", description = "Serviço para o usuario solicitar sua troca de senha.")
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(@RequestBody PasswordResetRequest email) {
 
-    Usuario usuario = usuarioService.findByEmail(email.getEmail());
+        Usuario usuario = usuarioService.findByEmail(email.getEmail());
 
-    if (usuario != null) {
-        usuarioService.SendEmail(usuario, EmailType.PASSWORD_RESET);
-        return ResponseEntity.ok("Email de redefinição de senha enviado.");
-    } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
-    }
+        if (usuario != null) {
+            usuarioService.SendEmail(usuario, EmailType.PASSWORD_RESET);
+            return ResponseEntity.ok("Email de redefinição de senha enviado.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+        }
     }
 
     @Operation(summary = "reset password page", description = "serviço para renderizar a página onde o usuario poderá trocar sua senha")
     @GetMapping("/password-reset")
     public String showPasswordResetForm(@RequestParam("token") String token, Model model) {
-        
+
         Context context = new Context();
         context.setVariable("token", token);
         String htmlContent = templateEngine.process("form-password-reset", context);
@@ -142,13 +151,12 @@ public class UsuarioController {
     @Operation(summary = "method that resets the password", description = "serviço para trocar a senha do usuario por email")
     @PostMapping("/password-reset")
     public String handlePasswordReset(@RequestParam("token") String token,
-                                      @RequestParam("newPassword") String newPassword,
-                                      @RequestParam("confirmPassword") String confirmPassword, Model model) {
-                         
-      
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword, Model model) {
+
         try {
             String result = usuarioService.resetPassword(token, newPassword, confirmPassword);
-    
+
             if ("redefined".equals(result)) {
                 return renderTemplate(model, "feedback-p", "Redefinição realizada!");
             } else {
@@ -157,7 +165,7 @@ public class UsuarioController {
         } catch (Exception e) {
             return renderTemplate(model, "feedback-n", "Erro ao redefinir a senha!");
         }
-    
+
     }
 
     private String renderTemplate(Model model, String templateName, String message) {
@@ -169,4 +177,3 @@ public class UsuarioController {
     }
 
 }
-

@@ -23,7 +23,6 @@ import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoService;
 
-
 @RestController
 @RequestMapping("/api/produto")
 @CrossOrigin
@@ -38,7 +37,7 @@ public class ProdutoController {
     private CategoriaProdutoService categoriaProdutoService;
 
     @PostMapping("/{idUser}")
-    public ResponseEntity<Produto> save(@PathVariable("idUser")Long idUser,
+    public ResponseEntity<Produto> save(@PathVariable("idUser") Long idUser,
             @RequestParam("imagem") MultipartFile imagem,
             @RequestParam("produto") String produtoRequestJson) {
         try {
@@ -51,7 +50,7 @@ public class ProdutoController {
             String imagemUrl = imagemService.uploadImage(imagem);
             produtoNovo.setImagemUrl(imagemUrl);
 
-            Produto produto = produtoService.save(idUser,produtoNovo);
+            Produto produto = produtoService.save(idUser, produtoNovo);
             return new ResponseEntity<>(produto, HttpStatus.CREATED);
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
@@ -75,7 +74,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/search/{produto}")
-    public List<Produto> search(@PathVariable String produto){
+    public List<Produto> search(@PathVariable String produto) {
         return produtoService.search(produto);
     }
 
@@ -83,7 +82,6 @@ public class ProdutoController {
     public List<Produto> ProdutosUsuario(@PathVariable Long id) {
         return produtoService.ProdutoUsuario(id);
     }
-    
 
     @PutMapping("/{id}")
     public ResponseEntity<Produto> update(
@@ -91,32 +89,31 @@ public class ProdutoController {
             @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @RequestPart(value = "produto", required = false) String request) {
 
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ProdutoRequest produtoRequest = objectMapper.readValue(request, ProdutoRequest.class);
 
-                try{
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    ProdutoRequest produtoRequest = objectMapper.readValue(request, ProdutoRequest.class);
+            Produto produtoAtual = produtoService.obterPorID(id);
 
-                    Produto produtoAtual = produtoService.obterPorID(id);
-                     // Se uma nova imagem for fornecida, faça o upload e defina a nova URL
-                    if (imagem != null && !imagem.isEmpty()) {
-                        String imagemUrl = imagemService.uploadImage(imagem);
-                        produtoRequest.setImagem(imagemUrl);
-                    } else {
-                        // Mantém a URL da imagem existente se uma nova imagem não for fornecida
-                        produtoRequest.setImagem(produtoAtual.getImagemUrl());
-                    }
+            if (imagem != null && !imagem.isEmpty()) {
+                String imagemUrl = imagemService.uploadImage(imagem);
+                produtoRequest.setImagem(imagemUrl);
+            } else {
 
-                    Produto produtoNovo = produtoRequest.build();
-                    produtoNovo.setCategoria(categoriaProdutoService.obterPorId(produtoRequest.getIdCategoria()));
+                produtoRequest.setImagem(produtoAtual.getImagemUrl());
+            }
 
-                    produtoService.update(id, produtoNovo);
+            Produto produtoNovo = produtoRequest.build();
+            produtoNovo.setCategoria(categoriaProdutoService.obterPorId(produtoRequest.getIdCategoria()));
 
-                    return ResponseEntity.ok().build();
-                }catch (Exception e) {
-                    System.err.println("Error: " + e.getMessage());
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-                }
-       
+            produtoService.update(id, produtoNovo);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
     }
 
     @DeleteMapping("/{id}")

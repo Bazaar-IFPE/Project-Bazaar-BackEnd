@@ -20,7 +20,6 @@ import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.email.Emails;
 import br.com.ifpe.bazzar.modelo.email.EmailsRepository;
 
-
 @Service
 public class UsuarioService {
 
@@ -37,7 +36,6 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Transactional
     public Usuario save(Usuario usuario) {
     
@@ -53,15 +51,16 @@ public class UsuarioService {
             throw new UserException(UserException.MSG_LOGIN_JA_EXISTENTE);
         }
 
+
         usuario.setHabilitado(Boolean.TRUE);
         usuario.setVersao(1L);
         usuario.setDataCriacao(LocalDate.now());
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuario.setSituacao(UserType.PENDENTE);
-    
+
         Usuario savedUsuario = repository.save(usuario);
         SendEmail(savedUsuario, EmailType.VERIFICATION);
-        
+
         return savedUsuario;
     }
 
@@ -71,12 +70,12 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<Usuario> findAll(){
-         return repository.findAll();
+    public List<Usuario> findAll() {
+        return repository.findAll();
     }
 
     @Transactional
-    public void update(Long id, UsuarioAlteradoRequest usuarioAlterado){
+    public void update(Long id, UsuarioAlteradoRequest usuarioAlterado) {
 
         if(!usuarioAlterado.getNovaSenha().equals(usuarioAlterado.getConfirmaSenha())){
             throw new UserException(UserException.MSG_SENHA_NAO_COINCIDEM);
@@ -87,23 +86,23 @@ public class UsuarioService {
             usuario.setNumeroTelefone(usuarioAlterado.getNumeroTelefone());
             usuario.setImagemUrl(usuarioAlterado.getImagemUrl());
             usuario.setSenha(passwordEncoder.encode(usuarioAlterado.getNovaSenha()));
-            usuario.setVersao(usuario.getVersao()+1);
+            usuario.setVersao(usuario.getVersao() + 1);
             repository.save(usuario);
         
     }
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Long id) {
         Usuario usuario = repository.findById(id).get();
         usuario.setHabilitado(Boolean.FALSE);
-        usuario.setVersao(usuario.getVersao()+1);
+        usuario.setVersao(usuario.getVersao() + 1);
 
         repository.save(usuario);
     }
 
     @Transactional
     public void SendEmail(Usuario usuario, EmailType emailType) {
-        
+
         Emails emails = new Emails();
         emails.setUsuario(usuario);
         emails.setEmailType(emailType);
@@ -122,7 +121,6 @@ public class UsuarioService {
         }
     }
 
-   
     @Transactional
     public String verificarCadastro(String uuid) {
         Emails emailVerification = emailRepository.findByUuid(UUID.fromString(uuid));
@@ -141,6 +139,7 @@ public class UsuarioService {
             return "Usuário não verificado";
         }
     }
+
     @Transactional
     public String resetPassword(String token, String newPassword, String confirmPassword) {
 
@@ -164,17 +163,20 @@ public class UsuarioService {
             }
         }
     }
+
     @Transactional
     public boolean isUserActive(String login) {
         
         Optional<Usuario> optUsuario = repository.findByLogin(login);
 
-        if(optUsuario.isPresent()){
+        if (optUsuario.isPresent()) {
             Usuario usuario = optUsuario.get();
             return UserType.ATIVO.equals(usuario.getSituacao());
-        }else return false;
-        
+        } else
+            return false;
+
     }
+
     @Transactional
     public Usuario findByEmail(String email) {
         Optional<Usuario> usuario = repository.findByEmail(email);
