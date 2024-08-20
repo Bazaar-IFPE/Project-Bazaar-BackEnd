@@ -30,6 +30,7 @@ import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 import br.com.ifpe.bazzar.security.jwt.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -48,21 +49,25 @@ public class UsuarioController {
     @Autowired
     private SpringTemplateEngine templateEngine;
 
+    @Operation(summary = "Login user.", description = "Serviço se logar como usuario.")
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authDto) {
         return ResponseEntity.ok(authService.login(authDto));
     }
 
+    @Operation(summary = "search for a user.", description = "Serviço para buscar um usuario.")
     @GetMapping("/{id}")
     public Usuario obterPorID(@PathVariable Long id) {
         return usuarioService.obterPorID(id);
     }
 
+    @Operation(summary = "search all users.", description = "Serviço para buscar todos os usuarios.")
     @GetMapping
     public List<Usuario> buscarTodos(){
         return usuarioService.findAll();
     }
 
+    @Operation(summary = "save a user.", description = "Serviço para salvar um usuario.")
     @PostMapping
     public ResponseEntity<Usuario> save(@RequestBody UsuarioRequest request) {
 
@@ -70,6 +75,7 @@ public class UsuarioController {
         return new ResponseEntity<Usuario>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "check registration.", description = "Serviço para verificar o cadastro de um usuario.")
     @GetMapping(value = "/checkRegistration")
     public String verificarCadastro(@RequestParam("uuid") String uuid, Model model) {
         
@@ -81,11 +87,13 @@ public class UsuarioController {
 
     }  
     
+    @Operation(summary = "check condition.", description = "Serviço para verificar a condição do usuario.")
     @GetMapping("/userCondition")
     public Boolean isUserActive (@RequestParam String login) {
         return usuarioService.isUserActive(login);
     }
     
+    @Operation(summary = "update a user.", description = "Serviço para atualizar um usuario.")
     @PutMapping("/{id}")
     public ResponseEntity<String> editUser(@PathVariable("id") Long id, 
                                        @RequestParam("imagem") MultipartFile imagem, 
@@ -106,6 +114,7 @@ public class UsuarioController {
     }
 }
 
+    @Operation(summary = "request password change.", description = "Serviço para o usuario solicitar sua troca de senha.")
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(@RequestBody PasswordResetRequest email) {
 
@@ -119,6 +128,7 @@ public class UsuarioController {
     }
     }
 
+    @Operation(summary = "reset password page", description = "serviço para renderizar a página onde o usuario poderá trocar sua senha")
     @GetMapping("/password-reset")
     public String showPasswordResetForm(@RequestParam("token") String token, Model model) {
         
@@ -129,6 +139,7 @@ public class UsuarioController {
         return htmlContent;
     }
 
+    @Operation(summary = "method that resets the password", description = "serviço para trocar a senha do usuario por email")
     @PostMapping("/password-reset")
     public String handlePasswordReset(@RequestParam("token") String token,
                                       @RequestParam("newPassword") String newPassword,

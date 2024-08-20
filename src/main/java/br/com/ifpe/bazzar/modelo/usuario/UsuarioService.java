@@ -12,9 +12,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import br.com.ifpe.bazzar.modelo.email.EmailsService;
+import br.com.ifpe.bazzar.util.exception.UserException;
 import br.com.ifpe.bazzar.api.Dto.UsuarioAlteradoRequest;
 import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.enums.UserType;
@@ -25,7 +24,6 @@ import br.com.ifpe.bazzar.modelo.email.EmailsRepository;
 @Service
 public class UsuarioService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
     @Autowired
     private UsuarioRepository repository;
@@ -43,6 +41,18 @@ public class UsuarioService {
     @Transactional
     public Usuario save(Usuario usuario) {
     
+        if(repository.existsByEmail(usuario.getEmail())){
+            throw new UserException(UserException.MSG_EMAIL_JA_EXISTENTE);
+        }
+
+        if(repository.existsByCpf(usuario.getCpf())){
+            throw new UserException(UserException.MSG_CPF_JA_EXISTENTE);
+        }
+
+        if(repository.existsByLogin(usuario.getLogin())){
+            throw new UserException(UserException.MSG_LOGIN_JA_EXISTENTE);
+        }
+
         usuario.setHabilitado(Boolean.TRUE);
         usuario.setVersao(1L);
         usuario.setDataCriacao(LocalDate.now());
@@ -69,11 +79,8 @@ public class UsuarioService {
     public void update(Long id, UsuarioAlteradoRequest usuarioAlterado){
 
         if(!usuarioAlterado.getNovaSenha().equals(usuarioAlterado.getConfirmaSenha())){
-
-            //TODO: CRIAR EXEPTION 
-
-            System.out.println("As senhas não coincidem");
-        }else{
+            throw new UserException(UserException.MSG_SENHA_NAO_COINCIDEM);
+        }
             
             Usuario usuario = repository.findById(id).get();
             usuario.setNomeCompleto(usuarioAlterado.getNomeCompleto());
@@ -82,7 +89,7 @@ public class UsuarioService {
             usuario.setSenha(passwordEncoder.encode(usuarioAlterado.getNovaSenha()));
             usuario.setVersao(usuario.getVersao()+1);
             repository.save(usuario);
-        }
+        
     }
 
     @Transactional
@@ -111,9 +118,7 @@ public class UsuarioService {
         try {
             emailService.enviarEmail(emailType, usuario.getEmail(), parameters, usuario);
         } catch (Exception e) {
-
-            //TODO: CRIAR EXEPTION 
-            logger.error("Error sending email: {}", e.getMessage(), e);
+            throw new UserException(UserException.MSG_ENVIO_FALHO_EMAIL);
         }
     }
 
@@ -121,8 +126,6 @@ public class UsuarioService {
     @Transactional
     public String verificarCadastro(String uuid) {
         Emails emailVerification = emailRepository.findByUuid(UUID.fromString(uuid));
-
-        //TODO: CRIAR EXEPTION 
 
         if (emailVerification != null) {
             if (emailVerification.getExpirationDate().compareTo(Instant.now()) >= 0) {
@@ -141,10 +144,9 @@ public class UsuarioService {
     @Transactional
     public String resetPassword(String token, String newPassword, String confirmPassword) {
 
-        //TODO: CRIAR EXEPTION 
 
         if (!newPassword.equals(confirmPassword)) {
-            return "no-match";
+            throw new UserException(UserException.MSG_SENHA_NAO_COINCIDEM);
         }else{
             Emails emailPassword = emailRepository.findByUuid(UUID.fromString(token));
 
@@ -153,18 +155,18 @@ public class UsuarioService {
                     emailPassword.getUsuario().setSenha(passwordEncoder.encode(newPassword));
                     repository.save(emailPassword.getUsuario());
                     emailRepository.delete(emailPassword);
-                    return "redefined";
+                    return "senha redefinida";
                 } else {
-                    return "token-invalid";
+                    throw new UserException(UserException.MSG_TOKEN_INVALIDO);
                 }
             } else {
-                return "token-invalid";
+                throw new UserException(UserException.MSG_TOKEN_INVALIDO);
             }
         }
     }
     @Transactional
     public boolean isUserActive(String login) {
-        //TODO: CRIAR EXEPTION 
+        
         Optional<Usuario> optUsuario = repository.findByLogin(login);
 
         if(optUsuario.isPresent()){
