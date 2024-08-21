@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
+import br.com.ifpe.bazzar.util.exception.ProdException;
+import br.com.ifpe.bazzar.util.exception.UserException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 
@@ -25,6 +26,13 @@ public class ProdutoService {
    //métodos para  produtos relacionados com usuario 
    @Transactional
    public Produto save(Long userId, Produto produto) {
+
+      if(produto.getTitulo()== null || produto.getTitulo().isEmpty()){
+         throw new ProdException(ProdException.MSG_TITULO_NULO);
+      }
+      if(produto.getValorUnitario() == null || produto.getValorUnitario() <= 0){
+         throw new ProdException(ProdException.MSG_VALOR_INVALIDO);
+      }
 
       Usuario usuario = userRepository.findById(userId).get();
       produto.setUsuario(usuario);
@@ -50,8 +58,16 @@ public class ProdutoService {
    @Transactional
    public void update(Long id, Produto produtoAlterado) {
 
+      if(produtoAlterado.getTitulo()== null || produtoAlterado.getTitulo().isEmpty()){
+         throw new ProdException(ProdException.MSG_TITULO_NULO);
+      }
+      if(produtoAlterado.getValorUnitario() == null || produtoAlterado.getValorUnitario() <= 0){
+         throw new ProdException(ProdException.MSG_VALOR_INVALIDO);
+      }
+
       Produto produto = repository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
+            .orElseThrow(() -> new ProdException(ProdException.MSG_PRODUTO_NAO_ENCONTRADO + id));
+
       produto.setCodigo(produtoAlterado.getCodigo());
       produto.setTitulo(produtoAlterado.getTitulo());
       produto.setDescricao(produtoAlterado.getDescricao());
@@ -69,7 +85,8 @@ public class ProdutoService {
       repository.save(produto);
 
       Usuario usuario = userRepository.findById(produto.getUsuario().getId())
-      .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+      .orElseThrow(() -> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
+
       usuario.getProdutos().remove(produto);
       usuario.setVersao(usuario.getVersao()+1);
       userRepository.save(usuario);
