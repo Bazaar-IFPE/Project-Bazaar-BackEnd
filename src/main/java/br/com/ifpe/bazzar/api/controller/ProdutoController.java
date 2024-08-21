@@ -22,6 +22,7 @@ import br.com.ifpe.bazzar.modelo.Categoria.CategoriaProdutoService;
 import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/produto")
@@ -36,6 +37,7 @@ public class ProdutoController {
     @Autowired
     private CategoriaProdutoService categoriaProdutoService;
 
+    @Operation(summary = "save a product.", description = "Serviço para adicionar um produto.")
     @PostMapping("/{idUser}")
     public ResponseEntity<Produto> save(@PathVariable("idUser") Long idUser,
             @RequestParam("imagem") MultipartFile imagem,
@@ -58,31 +60,37 @@ public class ProdutoController {
         }
     }
 
+    @Operation(summary = "list all products.", description = "Serviço para listar todos produtos.")
     @GetMapping
     public List<Produto> listarTodos(@RequestParam(value = "descricao", required = false) String descricao) {
         return produtoService.listarTodos(descricao);
     }
 
+    @Operation(summary = "list the five cheapest products.", description = "Serviço para listar os cinco produtos mais baratos.")
     @GetMapping("/mais-baratos/{descricao}")
     public List<Produto> maisBaratos(@PathVariable String descricao) {
         return produtoService.topCincoBaratosPorCategoria(descricao);
     }
 
+    @Operation(summary = "search user by id.", description = "Serviço para buscar um usuario por id .")
     @GetMapping("/{id}")
     public Produto obterPorID(@PathVariable Long id) {
         return produtoService.obterPorID(id);
     }
 
+    @Operation(summary = "search a product.", description = "Serviço para barra de pesquisa, buscando produtos de forma sensível.")
     @GetMapping("/search/{produto}")
     public List<Produto> search(@PathVariable String produto) {
         return produtoService.search(produto);
     }
 
+    @Operation(summary = "search for a user's product list.", description = "Serviço para buscar a lista de produtos de um usuario.")
     @GetMapping("/usuario/{id}")
     public List<Produto> ProdutosUsuario(@PathVariable Long id) {
         return produtoService.ProdutoUsuario(id);
     }
 
+    @Operation(summary = "update a product.", description = "Serviço para atualizar um produto.")
     @PutMapping("/{id}")
     public ResponseEntity<Produto> update(
             @PathVariable("id") Long id,
@@ -116,6 +124,7 @@ public class ProdutoController {
 
     }
 
+    @Operation(summary = "delete a product.", description = "Serviço para apagar um produto.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         produtoService.delete(id);

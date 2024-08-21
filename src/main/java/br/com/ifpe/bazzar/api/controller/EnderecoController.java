@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.bazzar.api.Dto.EnderecoRequest;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
 import br.com.ifpe.bazzar.modelo.endereco.EnderecoService;
+import io.swagger.v3.oas.annotations.Operation;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ public class EnderecoController {
     @Autowired
     private EnderecoService enderecoService;
 
+    @Operation(summary = "save a address.", description = "Serviço para adicionar um endereço.")
     @PostMapping("/{idUser}")
     public ResponseEntity<Endereco> save( @PathVariable("idUser") Long idUser ,@RequestBody EnderecoRequest request) {
         enderecoService.save(idUser,request.build());
@@ -31,6 +34,7 @@ public class EnderecoController {
     }
 
 
+    @Operation(summary = "update a address.", description = "Serviço para atualizar um endereço.")
     @PutMapping("/{idEndereco}")
     public ResponseEntity<Endereco> update(@PathVariable("idEndereco") long idEndereco, EnderecoRequest request) {
 
@@ -41,6 +45,7 @@ public class EnderecoController {
 
     }
 
+    @Operation(summary = "delete a address.", description = "Serviço para apagar um endereço.")
     @DeleteMapping("/{idEndereco}")
     public ResponseEntity<Void> delete(@PathVariable Long idEndereco){
         enderecoService.delete(idEndereco);
