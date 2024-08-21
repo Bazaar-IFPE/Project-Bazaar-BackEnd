@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
+import br.com.ifpe.bazzar.util.exception.AddressException;
+import br.com.ifpe.bazzar.util.exception.UserException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -22,13 +23,17 @@ public class EnderecoService {
 
     @Transactional
     public Endereco save(Long userId, Endereco endereco){
-        //buscando usuario e salvando no endereço
-        Usuario usuario = userRepository.findById(userId).get();
+
+        if(endereco.getCep() == null || endereco.getCep().isEmpty()){
+            throw new AddressException(AddressException.MSG_CEP_INVALIDO);
+        }
+        
+        Usuario usuario = userRepository.findById(userId)
+        .orElseThrow(()-> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
+        
         endereco.setUsuario(usuario);
         endereco.setHabilitado(Boolean.TRUE);
         repository.save(endereco);
-
-        //acrecentando endereço criado a lista de endereços no usuario
         List<Endereco> listaEnderecos = usuario.getEnderecos();
 
         if(listaEnderecos == null){
@@ -47,7 +52,11 @@ public class EnderecoService {
     @Transactional
     public void update(Long id, Endereco enderecoAlterado){
 
-        Endereco endereco = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Endereco não encontrado com o ID: " + id));
+        Endereco endereco = repository.findById(id).orElseThrow(() -> new AddressException(AddressException.MSG_ENDERECO_NAO_ENCONTRADO));
+
+        if(endereco.getCep() == null || endereco.getCep().isEmpty()){
+            throw new AddressException(AddressException.MSG_CEP_INVALIDO);
+        }
 
         endereco.setBairro(enderecoAlterado.getBairro());
         endereco.setCep(enderecoAlterado.getCep());

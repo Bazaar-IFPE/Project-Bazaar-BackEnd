@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.slf4j.Logger;
 
+import br.com.ifpe.bazzar.util.exception.AddressException;
 import br.com.ifpe.bazzar.util.exception.ProdException;
 import br.com.ifpe.bazzar.util.exception.UserException;
 
@@ -25,6 +26,12 @@ public class GlobalException {
     public ResponseEntity<String> handleProdException(ProdException prodException) {
         logger.error("ProdException captada: {}", prodException.getMessage());
         return new ResponseEntity<>(prodException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AddressException.class)
+    public ResponseEntity<String> AddressException(AddressException addressException) {
+        logger.error("AddressException captada: {}", addressException.getMessage());
+        return new ResponseEntity<>(addressException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
    
