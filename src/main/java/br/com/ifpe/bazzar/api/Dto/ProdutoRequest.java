@@ -31,6 +31,7 @@ public class ProdutoRequest {
            .titulo(titulo)
            .descricao(descricao)
            .valorUnitario(valorUnitario)
+           .imagemUrl(imagem)
            .build();
    }
 }
