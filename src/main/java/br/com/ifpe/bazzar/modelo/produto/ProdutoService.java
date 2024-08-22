@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
@@ -13,7 +14,6 @@ import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
 import br.com.ifpe.bazzar.util.exception.ProdException;
 import br.com.ifpe.bazzar.util.exception.UserException;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Pageable;
 
 @Service
 public class ProdutoService {
@@ -111,6 +111,13 @@ public class ProdutoService {
    public Produto obterPorID(Long id) {
 
       return repository.findById(id).get();
+   }
+
+   public Usuario obterUsuarioDoProduto(Long idProduto) {
+
+      Usuario usuario = repository.obterUsuarioDoProduto(idProduto);
+
+      return usuario;
    }
 
    public List<Produto> search(String produto){

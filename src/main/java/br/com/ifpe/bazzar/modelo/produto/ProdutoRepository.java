@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import br.com.ifpe.bazzar.modelo.usuario.Usuario;
+
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
@@ -19,5 +21,8 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query("SELECT p FROM Produto p WHERE LOWER(p.titulo) LIKE LOWER(CONCAT('%',:busca,'%')) OR LOWER(p.descricao) LIKE LOWER(CONCAT('%', :busca, '%'))")
     List<Produto> search(@Param("busca")String produto);
+
+    @Query("SELECT p.usuario FROM Produto p WHERE p.id = :idProduto")
+    Usuario obterUsuarioDoProduto(Long idProduto);
    
 }

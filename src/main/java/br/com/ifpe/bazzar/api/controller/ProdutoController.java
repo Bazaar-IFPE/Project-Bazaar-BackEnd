@@ -22,6 +22,7 @@ import br.com.ifpe.bazzar.modelo.Categoria.CategoriaProdutoService;
 import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoService;
+import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -76,6 +77,12 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public Produto obterPorID(@PathVariable Long id) {
         return produtoService.obterPorID(id);
+    }
+
+    @Operation(summary = "search user by id.", description = "Serviço para buscar um usuario por id .")
+    @GetMapping("/obterUsuario/{idProduto}")
+    public Usuario obterUsuarioDoProduto(@PathVariable Long idProduto) {
+        return produtoService.obterUsuarioDoProduto(idProduto);
     }
 
     @Operation(summary = "search a product.", description = "Serviço para barra de pesquisa, buscando produtos de forma sensível.")
