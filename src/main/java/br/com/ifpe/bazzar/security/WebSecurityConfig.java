@@ -50,6 +50,7 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(auth -> auth.requestMatchers("/api/usuario/**").permitAll()
 											.requestMatchers("/api/produto/**").permitAll()
 											.requestMatchers("/api/endereco/**").permitAll()
+											.requestMatchers("/api/pagamento/**").permitAll()
 											.requestMatchers("/api/categoriaproduto/**").permitAll()
 											.requestMatchers("/email/**").permitAll()
 											.requestMatchers("/img/**").permitAll()
