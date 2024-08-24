@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.Dto;
+package br.com.ifpe.bazzar.api.controller.Usuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

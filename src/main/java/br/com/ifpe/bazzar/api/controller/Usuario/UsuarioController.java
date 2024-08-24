@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.controller;
+package br.com.ifpe.bazzar.api.controller.Usuario;
 
 import java.util.List;
 
@@ -24,15 +24,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
-import br.com.ifpe.bazzar.api.Dto.PasswordResetRequest;
-import br.com.ifpe.bazzar.api.Dto.UsuarioAlteradoRequest;
-import br.com.ifpe.bazzar.api.Dto.UsuarioRequest;
 import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 import br.com.ifpe.bazzar.security.jwt.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -51,6 +49,14 @@ public class UsuarioController {
     @Autowired
     private SpringTemplateEngine templateEngine;
 
+    @Operation(summary = "save a user.", description = "Serviço para salvar um usuario.")
+    @PostMapping
+    public ResponseEntity<Usuario> save(@RequestBody @Valid UsuarioRequest request) {
+
+        usuarioService.save(request.build());
+        return new ResponseEntity<Usuario>(HttpStatus.CREATED);
+    }
+
     @Operation(summary = "Login user.", description = "Serviço se logar como usuario.")
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authDto) {
@@ -67,14 +73,6 @@ public class UsuarioController {
     @GetMapping
     public List<Usuario> buscarTodos() {
         return usuarioService.findAll();
-    }
-
-    @Operation(summary = "save a user.", description = "Serviço para salvar um usuario.")
-    @PostMapping
-    public ResponseEntity<Usuario> save(@RequestBody UsuarioRequest request) {
-
-        usuarioService.save(request.build());
-        return new ResponseEntity<Usuario>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "check registration.", description = "Serviço para verificar o cadastro de um usuario.")

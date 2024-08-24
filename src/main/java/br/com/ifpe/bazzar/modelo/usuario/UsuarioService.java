@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.ifpe.bazzar.modelo.email.EmailsService;
 import br.com.ifpe.bazzar.util.exception.UserException;
-import br.com.ifpe.bazzar.api.Dto.UsuarioAlteradoRequest;
+import br.com.ifpe.bazzar.api.controller.Usuario.UsuarioAlteradoRequest;
 import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.email.Emails;

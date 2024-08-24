@@ -49,7 +49,7 @@ public class Usuario extends EntidadeAuditavel {
     @Column(nullable = false)
     private String senha;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String cpf;
 
     @Column(nullable = false)
