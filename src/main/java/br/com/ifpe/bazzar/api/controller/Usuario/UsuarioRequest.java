@@ -37,7 +37,6 @@ public class UsuarioRequest {
     private String cpf;
 
     @NotBlank(message = "O numero de telefone e de preenchimento obrigatorio")
-    @Length(min = 6, max = 14, message = "O campo Fone tem que ter entre {min} e {max} caracteres")
     private String numeroTelefone;
 
 
