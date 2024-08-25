@@ -43,6 +43,8 @@ public class CategoriaProdutoService {
 
         repository.save(categoriaProduto);
     }
+
+    
     
     @Transactional
     public void delete(Long id){
