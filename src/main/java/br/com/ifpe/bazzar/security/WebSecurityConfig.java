@@ -49,6 +49,7 @@ public class WebSecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth.requestMatchers("/api/usuario/**").permitAll()
 											.requestMatchers("/api/produto/**").permitAll()
+											.requestMatchers("/api/carrinho/**").permitAll()
 											.requestMatchers("/api/endereco/**").permitAll()
 											.requestMatchers("/api/pagamento/**").permitAll()
 											.requestMatchers("/api/categoriaproduto/**").permitAll()

@@ -4,12 +4,16 @@ import java.util.List;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SQLRestriction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -67,7 +71,8 @@ public class Usuario extends EntidadeAuditavel {
     @Fetch(FetchMode.SUBSELECT)
     private List<Pagamento> pagamentos;
 
-    @OneToOne(mappedBy = "usuario", orphanRemoval = true)
+    @OneToOne(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Carrinho carrinho;
 
     @Enumerated(EnumType.STRING)
