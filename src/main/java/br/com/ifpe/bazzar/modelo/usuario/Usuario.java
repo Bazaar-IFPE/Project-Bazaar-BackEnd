@@ -8,6 +8,7 @@ import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
+import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +22,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.OneToOne;
 
 @Entity
 @Table(name = "Usuario")
@@ -64,6 +66,9 @@ public class Usuario extends EntidadeAuditavel {
     @OneToMany(mappedBy ="usuario", orphanRemoval = true ,fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)
     private List<Pagamento> pagamentos;
+
+    @OneToOne(mappedBy = "usuario", orphanRemoval = true)
+    private Carrinho carrinho;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

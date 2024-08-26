@@ -14,9 +14,6 @@ import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @RestController
 @RequestMapping("/api/carrinho")
@@ -27,10 +24,9 @@ public class CarrinhoController {
     private CarrinhoService service;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<Carrinho> save(@PathVariable("userId")Long userId ,@RequestBody CarrinhoRequest request) {
-        Carrinho carrinho = request.build();
-        service.save(userId,carrinho);
-        return new ResponseEntity<Carrinho>(carrinho, HttpStatus.CREATED);
+    public ResponseEntity<Carrinho> save(@PathVariable("userId")Long userId) {
+        service.save(userId);
+        return new ResponseEntity<Carrinho>(HttpStatus.CREATED);
     }
 
     @GetMapping

@@ -24,15 +24,21 @@ public class CarrinhoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public Carrinho save (Long userId , Carrinho carrinho){
+    public Carrinho save (Long userId){
 
         Usuario usuario = usuarioRepository.findById(userId).get();
+        Carrinho carrinho = new Carrinho();
         carrinho.setUsuario(usuario);
         carrinho.setHabilitado(Boolean.TRUE);
         carrinho.setDataCriacao(LocalDate.now());
         carrinho.setVersao(1L);
-        return repository.save(carrinho);
+        carrinho.setTotal(0.0);
+        Carrinho carrinhoSave = repository.save(carrinho);
 
+        usuario.setCarrinho(carrinhoSave);
+        usuarioRepository.save(usuario);
+
+        return carrinhoSave;
     }
 
     public List<Carrinho> findAll (){
