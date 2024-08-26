@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -25,10 +26,10 @@ public class CarrinhoController {
     @Autowired
     private CarrinhoService service;
 
-    @PostMapping
-    public ResponseEntity<Carrinho> save(@RequestBody CarrinhoRequest request) {
+    @PostMapping("/{userId}")
+    public ResponseEntity<Carrinho> save(@PathVariable("userId")Long userId ,@RequestBody CarrinhoRequest request) {
         Carrinho carrinho = request.build();
-        service.save(carrinho);
+        service.save(userId,carrinho);
         return new ResponseEntity<Carrinho>(carrinho, HttpStatus.CREATED);
     }
 
@@ -40,6 +41,11 @@ public class CarrinhoController {
     @GetMapping("/{id}")
     public Carrinho findById(@PathVariable Long id) {
         return service.findById(id);
+    }
+
+    @PutMapping("/{cartId}/{productId}")
+    public void addProduct(@PathVariable Long cartId, @PathVariable Long productId){
+        service.addProduct(cartId, productId);
     }
 
     @DeleteMapping("/{id}")
