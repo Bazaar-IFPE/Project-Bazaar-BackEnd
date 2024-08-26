@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,13 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarrinhoRequest {
 
-    private Produto produto;
+    private List<Produto> produtos;
     private Double total;
 
 
     public Carrinho build(){
         return Carrinho.builder()
-        .produto(produto)
+        .produtos(produtos)
         .total(total)
         .build();
     }
