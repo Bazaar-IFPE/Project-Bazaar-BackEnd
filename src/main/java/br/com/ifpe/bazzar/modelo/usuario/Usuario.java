@@ -6,6 +6,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SQLRestriction;
 import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
+import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
@@ -34,9 +35,6 @@ public class Usuario extends EntidadeAuditavel {
     @Column
     private String imagemUrl;
 
-    @Column
-    private Long id;
-
     @Column(nullable = false)
     private String nomeCompleto;
 
@@ -62,6 +60,10 @@ public class Usuario extends EntidadeAuditavel {
     @OneToMany(mappedBy ="usuario", orphanRemoval = true ,fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)
     private List<Produto> produtos;
+
+    @OneToMany(mappedBy ="usuario", orphanRemoval = true ,fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Pagamento> pagamentos;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

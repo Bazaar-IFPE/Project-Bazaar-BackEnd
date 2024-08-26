@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.pagamento.PagamentoService;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -25,10 +26,9 @@ public class PagamentoController {
     @Autowired
     private PagamentoService service;
 
-    @PostMapping
-    public ResponseEntity<Pagamento> save ( @RequestBody PagamentoRequest request){
-
-        service.save(request.build());
+    @PostMapping("/{userId}")
+    public ResponseEntity<Pagamento> save ( @PathVariable("userId") Long userId, @RequestBody PagamentoRequest request){
+        service.save(userId,request.build());
         return new ResponseEntity<Pagamento>(HttpStatus.CREATED);
     }
 

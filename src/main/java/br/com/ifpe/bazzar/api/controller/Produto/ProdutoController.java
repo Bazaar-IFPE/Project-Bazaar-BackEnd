@@ -40,8 +40,8 @@ public class ProdutoController {
     private CategoriaProdutoService categoriaProdutoService;
 
     @Operation(summary = "save a product.", description = "Serviço para adicionar um produto.")
-    @PostMapping("/{idUser}")
-    public ResponseEntity<Produto> save(@PathVariable("idUser") Long idUser,
+    @PostMapping("/{userId}")
+    public ResponseEntity<Produto> save(@PathVariable("userId") Long userId,
             @RequestParam("imagem") @Valid MultipartFile imagem,
             @RequestParam("produto") String produtoRequestJson) {
         try {
@@ -54,7 +54,7 @@ public class ProdutoController {
             String imagemUrl = imagemService.uploadImage(imagem);
             produtoNovo.setImagemUrl(imagemUrl);
 
-            Produto produto = produtoService.save(idUser, produtoNovo);
+            Produto produto = produtoService.save(userId, produtoNovo);
             return new ResponseEntity<>(produto, HttpStatus.CREATED);
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());

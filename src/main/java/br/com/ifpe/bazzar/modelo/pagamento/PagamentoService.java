@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.bazzar.modelo.usuario.Usuario;
+import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -13,10 +15,14 @@ public class PagamentoService {
     @Autowired
     private PagamentoRepository repository;
 
-    @Transactional
-    public Pagamento save(Pagamento pagamento) {
+    @Autowired
+    private UsuarioRepository userRepository;
 
-        
+    @Transactional
+    public Pagamento save(Long userId, Pagamento pagamento) {
+
+        Usuario usuario = userRepository.findById(userId).get();
+        pagamento.setUsuario(usuario);
         pagamento.setSituacao(Boolean.TRUE);
         pagamento.setHabilitado(Boolean.TRUE);
         pagamento.setVersao(1L);

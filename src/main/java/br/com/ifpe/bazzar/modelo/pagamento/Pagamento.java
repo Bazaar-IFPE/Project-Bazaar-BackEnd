@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +25,10 @@ import lombok.Setter;
 @Builder
 public class Pagamento extends EntidadeAuditavel {
 
+    @ManyToOne
     @JsonIgnore
     private Usuario usuario;
 
     private boolean situacao;
+    
 }
