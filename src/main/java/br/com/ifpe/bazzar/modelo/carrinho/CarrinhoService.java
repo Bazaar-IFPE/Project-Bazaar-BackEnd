@@ -55,6 +55,11 @@ public class CarrinhoService {
 
         Carrinho carrinho = repository.findById(carrinhoId).get();
         Produto produto = produtoRepository.findById(productId).get();
+        Usuario donoCarrinho = carrinho.getUsuario(); 
+        if (donoCarrinho.getProdutos().contains(produto)) {
+            throw new RuntimeException("Você não pode adicionar o seu próprio produto ao carrinho!");
+        }
+
         List<Produto> listaProdutos = carrinho.getProdutos();
         if(listaProdutos == null){
             listaProdutos = new ArrayList<Produto>();
