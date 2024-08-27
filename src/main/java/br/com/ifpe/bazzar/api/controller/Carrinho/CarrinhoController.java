@@ -44,6 +44,11 @@ public class CarrinhoController {
         service.addProduct(cartId, productId);
     }
 
+    @PutMapping("/remove/{cartId}/{productId}")
+    public void removeProduct(@PathVariable Long cartId, @PathVariable Long productId){
+        service.removeProduct(cartId, productId);
+    }
+
     @DeleteMapping("/{id}")
     public void delete (Long id){
         service.delete(id);

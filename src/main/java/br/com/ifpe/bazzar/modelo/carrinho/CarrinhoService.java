@@ -49,6 +49,8 @@ public class CarrinhoService {
         return repository.findById(id).get();
     }
 
+    // as formas de alterar um carrinho é adicionando ou removendo produtos,os metodos responsaveis por isso são addProduct e deleteProduct
+
     public void addProduct (Long carrinhoId, Long productId ){
 
         Carrinho carrinho = repository.findById(carrinhoId).get();
@@ -63,7 +65,24 @@ public class CarrinhoService {
         repository.save(carrinho);
     }
 
-    // as formas de alterar um carrinho é adicionando ou removendo produtos,os metodos responsaveis por isso são addProduct e deleteProduct
+    public void removeProduct (Long carrinhoId, Long productId){
+
+        Carrinho carrinho = repository.findById(carrinhoId).get();
+        Produto produto = produtoRepository.findById(productId).get();
+        List<Produto> listaProdutos = carrinho.getProdutos();
+        if (listaProdutos != null && listaProdutos.contains(produto)) {
+            listaProdutos.remove(produto);
+            carrinho.setProdutos(listaProdutos);
+            carrinho.setVersao(carrinho.getVersao()+1);
+            repository.save(carrinho);
+        }
+        else {
+            //TODO:criar exceptions de carrinho
+            throw new RuntimeException("Produto não encontrado no carrinho");
+        }
+
+    }
+
     
     public void delete(Long id){
         repository.deleteById(id);
