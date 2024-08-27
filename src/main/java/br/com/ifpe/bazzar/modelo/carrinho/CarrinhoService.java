@@ -93,8 +93,15 @@ public class CarrinhoService {
     }
 
     
-    public void delete(Long id){
-        repository.deleteById(id);
+    public void clean(Long cartId){
+        Carrinho carrinho = repository.findById(cartId).get();
+        List<Produto> listaProdutos = carrinho.getProdutos();
+        listaProdutos.clear();
+        carrinho.setProdutos(listaProdutos);
+        carrinho.setTotal(0.0);
+        carrinho.setVersao(carrinho.getVersao() + 1);
+        repository.save(carrinho);
+        
     }
 
 }

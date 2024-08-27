@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.pagamento.PagamentoService;
+import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,17 +27,19 @@ public class PagamentoController {
     @Autowired
     private PagamentoService service;
 
+    @Operation(summary = "create payment.", description = "Serviço para efetuar um pagamento .")
     @PostMapping("/{userId}")
     public ResponseEntity<Pagamento> save ( @PathVariable("userId") Long userId, @RequestBody PagamentoRequest request){
         service.save(userId,request.build());
         return new ResponseEntity<Pagamento>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "find all payments.", description = "Serviço para buscar todos pagamentos .")
     @GetMapping("{id}")
     public Pagamento finById(@RequestParam Long id) {
         return service.findById(id);
     }
-    
+    @Operation(summary = "find payment by id.", description = "Serviço para buscar um pagamento por id .")
     @GetMapping
     public List<Pagamento> findAll(){
         return service.findAll();
