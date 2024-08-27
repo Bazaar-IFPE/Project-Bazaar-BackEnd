@@ -62,6 +62,7 @@ public class CarrinhoService {
         listaProdutos.add(produto);
         carrinho.setProdutos(listaProdutos);
         carrinho.setVersao(carrinho.getVersao()+1);
+        total(carrinhoId);
         repository.save(carrinho);
     }
 
@@ -74,6 +75,7 @@ public class CarrinhoService {
             listaProdutos.remove(produto);
             carrinho.setProdutos(listaProdutos);
             carrinho.setVersao(carrinho.getVersao()+1);
+            total(carrinhoId);
             repository.save(carrinho);
         }
         else {
@@ -81,6 +83,13 @@ public class CarrinhoService {
             throw new RuntimeException("Produto não encontrado no carrinho");
         }
 
+    }
+
+    public void total(Long cartId){
+        Carrinho carrinho = repository.findById(cartId).get();
+        List<Produto> listaProdutos = carrinho.getProdutos();
+        double soma = listaProdutos.stream().mapToDouble(Produto::getValorUnitario).sum();
+        carrinho.setTotal(soma);
     }
 
     
