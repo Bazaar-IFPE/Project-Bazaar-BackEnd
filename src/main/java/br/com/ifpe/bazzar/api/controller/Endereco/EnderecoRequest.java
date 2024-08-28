@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.Dto;
+package br.com.ifpe.bazzar.api.controller.Endereco;
 
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
 import lombok.AllArgsConstructor;

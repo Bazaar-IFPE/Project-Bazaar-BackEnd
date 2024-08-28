@@ -106,7 +106,6 @@ public class CarrinhoService {
         carrinho.setTotal(0.0);
         carrinho.setVersao(carrinho.getVersao() + 1);
         repository.save(carrinho);
-        
     }
 
 }

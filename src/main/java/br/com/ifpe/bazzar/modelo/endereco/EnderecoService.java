@@ -50,6 +50,16 @@ public class EnderecoService {
     }
 
     @Transactional
+    public Endereco findById (Long id){
+        return repository.findById(id).get();
+    }
+
+    @Transactional
+    public List<Endereco> findall (){
+        return repository.findAll();
+    }
+
+    @Transactional
     public void update(Long id, Endereco enderecoAlterado){
 
         Endereco endereco = repository.findById(id).orElseThrow(() -> new AddressException(AddressException.MSG_ENDERECO_NAO_ENCONTRADO));
