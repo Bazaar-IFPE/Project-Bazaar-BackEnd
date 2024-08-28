@@ -50,7 +50,7 @@ public class EnderecoController {
     }
 
     @Operation(summary = "find address by id", description = "Serviço para buscar um endereço pelo id.")
-    @GetMapping("/{id}")
+    @GetMapping("/{Id}")
     public Endereco findById(@PathVariable Long Id) {
         return enderecoService.findById(Id);
     }
