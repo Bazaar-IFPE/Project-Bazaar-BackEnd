@@ -1,5 +1,5 @@
 package br.com.ifpe.bazzar.modelo.pedidos;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -9,6 +9,7 @@ import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.pagamento.PagamentoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PedidosService {
@@ -24,6 +25,7 @@ public class PedidosService {
   @Autowired
   private PagamentoRepository pagamentoRepository;
 
+  @Transactional
   public Pedidos save(Long compradorId, Long vendedorId, Long cartId, Long pagamentoId){
 
     Usuario comprador = userRepository.findById(compradorId).get();
@@ -40,6 +42,11 @@ public class PedidosService {
     pedido.setHabilitado(Boolean.TRUE);
     pedido.setVersao(1L);
     return repository.save(pedido);
+  }
+
+  @Transactional
+  public List<Pedidos> findAll (){
+    return repository.findAll();
   }
 
   
