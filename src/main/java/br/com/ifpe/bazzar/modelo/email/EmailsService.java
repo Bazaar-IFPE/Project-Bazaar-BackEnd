@@ -41,6 +41,9 @@ public class EmailsService {
                 case PASSWORD_RESET:
                     helper.setSubject("Redefinição de senha");
                     break;
+                case CONTACT:
+                    helper.setSubject("Feedback");
+                    break;
                 default:
                     throw new IllegalArgumentException("Tipo de email não suportado: " + emailType);
             }
