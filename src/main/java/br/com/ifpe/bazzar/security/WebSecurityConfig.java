@@ -52,6 +52,7 @@ public class WebSecurityConfig {
 											.requestMatchers("/api/carrinho/**").permitAll()
 											.requestMatchers("/api/endereco/**").permitAll()
 											.requestMatchers("/api/pagamento/**").permitAll()
+											.requestMatchers("/api/pedidos/**").permitAll()
 											.requestMatchers("/api/email/**").permitAll()
 											.requestMatchers("/api/categoriaproduto/**").permitAll()
 											.requestMatchers("/email/**").permitAll()

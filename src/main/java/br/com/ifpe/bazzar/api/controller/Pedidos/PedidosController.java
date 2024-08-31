@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.controller.pagamentos;
+package br.com.ifpe.bazzar.api.controller.Pedidos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import br.com.ifpe.bazzar.modelo.pedidos.PedidosService;
 @RestController
 @RequestMapping("/api/pedidos")
 @CrossOrigin
-public class PagamentosController {
+public class PedidosController {
   @Autowired
   private PedidosService service ;
 

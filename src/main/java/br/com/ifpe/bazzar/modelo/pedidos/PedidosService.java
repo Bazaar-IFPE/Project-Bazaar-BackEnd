@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoRepository;
+import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoService;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.pagamento.PagamentoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
@@ -21,6 +22,9 @@ public class PedidosService {
 
   @Autowired
   private CarrinhoRepository cartRepository;
+
+  @Autowired
+  private CarrinhoService carrinhoService;
 
   @Autowired
   private PagamentoRepository pagamentoRepository;
@@ -41,7 +45,10 @@ public class PedidosService {
     pedido.setDataCriacao(LocalDate.now());
     pedido.setHabilitado(Boolean.TRUE);
     pedido.setVersao(1L);
-    return repository.save(pedido);
+    Pedidos pedidoSalvo = repository.save(pedido);
+    carrinhoService.clean(cartId);
+    return pedidoSalvo;
+
   }
 
   @Transactional
