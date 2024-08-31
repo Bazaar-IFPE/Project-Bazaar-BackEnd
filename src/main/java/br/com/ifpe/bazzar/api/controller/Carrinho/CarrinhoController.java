@@ -45,7 +45,7 @@ public class CarrinhoController {
     }
 
     @Operation(summary = "adding product from cart by id.", description = "Serviço para alterar um carrinho adicionando um produto por id .")
-    @PutMapping("/{cartId}/{productId}")
+    @PutMapping("/add/{cartId}/{productId}")
     public void addProduct(@PathVariable Long cartId, @PathVariable Long productId){
         service.addProduct(cartId, productId);
     }
@@ -56,10 +56,16 @@ public class CarrinhoController {
         service.removeProduct(cartId, productId);
     }
 
-    @Operation(summary = "clear cart by id.", description = "Serviço para limpar um carrinho por id .")
-    @DeleteMapping("/{cartId}")
+    @Operation(summary = "clear cart by id.", description = "Serviço para alterar um carrinho limpando seus produtos .")
+    @PutMapping("/clean/{cartId}")
     public void clean (Long cartId){
         service.clean(cartId);
+    }
+
+    @Operation(summary = "delete cart by id.", description = "Serviço para deletar um carrinho por id .")
+    @DeleteMapping("/{cartId}")
+    public void delete (Long cartId){
+        service.delete(cartId);
     }
     
     

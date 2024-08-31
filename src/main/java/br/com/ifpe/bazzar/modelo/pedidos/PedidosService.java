@@ -52,9 +52,13 @@ public class PedidosService {
   }
 
   @Transactional
-  public List<Pedidos> findAll (){
+  public List<Pedidos> findAll(){
     return repository.findAll();
   }
 
+  @Transactional
+  public Pedidos findByID(Long id){
+    return repository.findById(id).get();
+  }
   
 }

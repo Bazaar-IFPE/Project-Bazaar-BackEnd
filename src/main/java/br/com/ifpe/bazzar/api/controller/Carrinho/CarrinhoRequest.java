@@ -17,7 +17,6 @@ public class CarrinhoRequest {
     private List<Produto> produtos;
     private Double total;
 
-
     public Carrinho build(){
         return Carrinho.builder()
         .produtos(produtos)

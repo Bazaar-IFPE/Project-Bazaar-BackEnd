@@ -28,7 +28,7 @@ import lombok.Setter;
 
 public class Pedidos extends EntidadeAuditavel {
   
-  @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comprador_id")
     private Usuario comprador;
 
@@ -36,7 +36,7 @@ public class Pedidos extends EntidadeAuditavel {
     @JoinColumn(name = "vendedor_id")
     private Usuario vendedor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "carrinho_id")
     private Carrinho carrinho;
 
