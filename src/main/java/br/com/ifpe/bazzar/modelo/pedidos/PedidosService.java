@@ -10,6 +10,9 @@ import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.pagamento.PagamentoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
+import br.com.ifpe.bazzar.util.exception.CartExeception;
+import br.com.ifpe.bazzar.util.exception.PaymentException;
+import br.com.ifpe.bazzar.util.exception.UserException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -29,15 +32,19 @@ public class PedidosService {
   @Autowired
   private PagamentoRepository pagamentoRepository;
 
-  @Transactional
-  public Pedidos save(Long compradorId, Long vendedorId, Long cartId, Long pagamentoId){
+ @Transactional
+public Pedidos save(Long compradorId, Long vendedorId, Long cartId, Long pagamentoId) {
+    
+    Usuario comprador = userRepository.findById(compradorId)
+        .orElseThrow(() -> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
+    Usuario vendedor = userRepository.findById(vendedorId)
+        .orElseThrow(() -> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
+    Carrinho cart = cartRepository.findById(cartId)
+        .orElseThrow(() -> new CartExeception(CartExeception.MSG_CARRINHO_NAO_ENCONTRADO));
+    Pagamento pagamento = pagamentoRepository.findById(pagamentoId)
+        .orElseThrow(() -> new PaymentException(PaymentException.MSG_PAGAMENTO_NAO_ENCONTRADO));
 
-    Usuario comprador = userRepository.findById(compradorId).get();
-    Usuario vendedor = userRepository.findById(vendedorId).get();
-    Carrinho cart = cartRepository.findById(cartId).get();
-    Pagamento pagamento = pagamentoRepository.findById(pagamentoId).get();
     Pedidos pedido = new Pedidos();
-
     pedido.setCarrinho(cart);
     pedido.setComprador(comprador);
     pedido.setVendedor(vendedor);
@@ -47,9 +54,9 @@ public class PedidosService {
     pedido.setVersao(1L);
     Pedidos pedidoSalvo = repository.save(pedido);
     carrinhoService.clean(cartId);
+    carrinhoService.delete(cartId);
     return pedidoSalvo;
-
-  }
+}
 
   @Transactional
   public List<Pedidos> findAll(){

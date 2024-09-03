@@ -11,6 +11,7 @@ import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
+import br.com.ifpe.bazzar.util.exception.CartExeception;
 
 @Service
 public class CarrinhoService {
@@ -57,7 +58,7 @@ public class CarrinhoService {
         Produto produto = produtoRepository.findById(productId).get();
         Usuario donoCarrinho = carrinho.getUsuario(); 
         if (donoCarrinho.getProdutos().contains(produto)) {
-            throw new RuntimeException("Você não pode adicionar o seu próprio produto ao carrinho!");
+            throw new CartExeception(CartExeception.MSG_PRODUTO_PROPRIO);
         }
 
         List<Produto> listaProdutos = carrinho.getProdutos();
@@ -84,8 +85,7 @@ public class CarrinhoService {
             repository.save(carrinho);
         }
         else {
-            //TODO:criar exceptions de carrinho
-            throw new RuntimeException("Produto não encontrado no carrinho");
+            throw new CartExeception(CartExeception.MSG_PRODUTO_NAO_ENCONTRADO);
         }
 
     }

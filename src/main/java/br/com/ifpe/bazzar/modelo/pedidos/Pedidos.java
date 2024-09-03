@@ -1,12 +1,9 @@
 package br.com.ifpe.bazzar.modelo.pedidos;
-
-import org.hibernate.annotations.SQLRestriction;
 import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -22,25 +19,24 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@SQLRestriction("Habilitado = true")
 @AllArgsConstructor
 @NoArgsConstructor
 
 public class Pedidos extends EntidadeAuditavel {
   
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "comprador_id")
     private Usuario comprador;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "vendedor_id")
     private Usuario vendedor;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "carrinho_id")
     private Carrinho carrinho;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "pagamento_id")
     private Pagamento pagamento;
 }
