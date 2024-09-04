@@ -27,7 +27,6 @@ public class PagamentoService {
         pagamento.setHabilitado(Boolean.TRUE);
         pagamento.setVersao(1L);
         pagamento.setDataCriacao(LocalDate.now());
-        pagamento.setSituacao(Boolean.TRUE);
         return repository.save(pagamento);
     }
 
