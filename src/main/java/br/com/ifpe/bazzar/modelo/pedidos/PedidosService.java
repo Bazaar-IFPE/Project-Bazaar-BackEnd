@@ -53,7 +53,6 @@ public Pedidos save(Long compradorId, Long vendedorId, Long cartId, Long pagamen
     pedido.setHabilitado(Boolean.TRUE);
     pedido.setVersao(1L);
     Pedidos pedidoSalvo = repository.save(pedido);
-    carrinhoService.clean(cartId);
     carrinhoService.delete(cartId);
     return pedidoSalvo;
 }
