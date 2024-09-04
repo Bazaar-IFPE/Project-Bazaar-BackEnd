@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.email.EmailsService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/email")
@@ -20,6 +21,7 @@ public class EmailController {
     @Autowired
     private EmailsService emailsService;
 
+    @Operation(summary = "send email feedback.", description = "Serviço recebermos um feedback ddo cliente por email.")
     @PostMapping("/feedback")
     public String enviarEmailFeedback(@RequestParam("fullName") String nome, 
                                       @RequestParam("email") String email,

@@ -11,7 +11,7 @@ import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
-import br.com.ifpe.bazzar.util.exception.CartExeception;
+import br.com.ifpe.bazzar.util.exception.CartException;
 
 @Service
 public class CarrinhoService {
@@ -63,7 +63,7 @@ public class CarrinhoService {
         Produto produto = produtoRepository.findById(productId).get();
         Usuario donoCarrinho = carrinho.getUsuario(); 
         if (donoCarrinho.getProdutos().contains(produto)) {
-            throw new CartExeception(CartExeception.MSG_PRODUTO_PROPRIO);
+            throw new CartException(CartException.MSG_PRODUTO_PROPRIO);
         }
 
         List<Produto> listaProdutos = carrinho.getProdutos();
@@ -90,7 +90,7 @@ public class CarrinhoService {
             repository.save(carrinho);
         }
         else {
-            throw new CartExeception(CartExeception.MSG_PRODUTO_NAO_ENCONTRADO);
+            throw new CartException(CartException.MSG_PRODUTO_NAO_ENCONTRADO);
         }
 
     }
@@ -113,8 +113,12 @@ public class CarrinhoService {
         repository.save(carrinho);
     }
 
-    public void delete(Long cartId){
-        repository.deleteById(cartId);
+    public void delete(Long cartId) {
+        if (repository.existsById(cartId)) {
+            repository.deleteById(cartId);
+        } else {
+            throw new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO);
+        }
     }
 
 }

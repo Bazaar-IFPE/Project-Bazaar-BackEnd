@@ -10,7 +10,7 @@ import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.pagamento.PagamentoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
-import br.com.ifpe.bazzar.util.exception.CartExeception;
+import br.com.ifpe.bazzar.util.exception.CartException;
 import br.com.ifpe.bazzar.util.exception.PaymentException;
 import br.com.ifpe.bazzar.util.exception.UserException;
 import jakarta.transaction.Transactional;
@@ -40,7 +40,7 @@ public Pedidos save(Long compradorId, Long vendedorId, Long cartId, Long pagamen
     Usuario vendedor = userRepository.findById(vendedorId)
         .orElseThrow(() -> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
     Carrinho cart = cartRepository.findById(cartId)
-        .orElseThrow(() -> new CartExeception(CartExeception.MSG_CARRINHO_NAO_ENCONTRADO));
+        .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
     Pagamento pagamento = pagamentoRepository.findById(pagamentoId)
         .orElseThrow(() -> new PaymentException(PaymentException.MSG_PAGAMENTO_NAO_ENCONTRADO));
 
