@@ -50,6 +50,10 @@ public class CarrinhoService {
         return repository.findById(id).get();
     }
 
+    public Long findCart (Long id){
+        return repository.findCarrinhoIdByUsuarioId(id);
+    }
+
     // as formas de alterar um carrinho é adicionando ou removendo produtos,os metodos responsaveis por isso são addProduct e deleteProduct
 
     public void addProduct (Long carrinhoId, Long productId ){

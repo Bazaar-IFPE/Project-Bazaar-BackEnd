@@ -44,6 +44,14 @@ public class CarrinhoController {
         return service.findById(id);
     }
 
+    @Operation(summary = "find cart id .", description = "Serviço para buscar o id de um carrinho .")
+    @GetMapping("cartId/{id}")
+    public Long findCart(@PathVariable Long id) {
+        return service.findCart(id);
+    }
+
+
+
     @Operation(summary = "adding product from cart by id.", description = "Serviço para alterar um carrinho adicionando um produto por id .")
     @PutMapping("/add/{cartId}/{productId}")
     public void addProduct(@PathVariable Long cartId, @PathVariable Long productId){
