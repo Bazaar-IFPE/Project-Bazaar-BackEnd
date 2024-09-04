@@ -7,8 +7,8 @@ import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.ifpe.bazzar.enums.UserType;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
+import br.com.ifpe.bazzar.modelo.enums.UserType;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;

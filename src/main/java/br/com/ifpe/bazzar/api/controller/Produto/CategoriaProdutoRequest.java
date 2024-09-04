@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.Dto;
+package br.com.ifpe.bazzar.api.controller.Produto;
 
 import br.com.ifpe.bazzar.modelo.Categoria.Categoria;
 import lombok.AllArgsConstructor;

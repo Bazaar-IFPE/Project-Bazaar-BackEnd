@@ -3,7 +3,7 @@ package br.com.ifpe.bazzar.modelo.carrinho;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class CarrinhoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public Carrinho save (Long userId){
+    public Carrinho save(Long userId) {
 
         Usuario usuario = usuarioRepository.findById(userId).get();
         Carrinho carrinho = new Carrinho();
@@ -42,42 +42,49 @@ public class CarrinhoService {
         return carrinhoSave;
     }
 
-    public List<Carrinho> findAll (){
+    public List<Carrinho> findAll() {
         return repository.findAll();
     }
 
-    public Carrinho findById (Long id){
-        return repository.findById(id).get();
+    public Carrinho findById(Long id) {
+    Optional<Carrinho> carrinho = repository.findById(id);
+    if (carrinho.isPresent()) {
+        return carrinho.get();
+    } else {
+        throw new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO);
+    }
+
     }
 
     public Long findCart(Long id) {
         return repository.findCarrinhoIdByUsuarioId(id).get();
-                         
+
     }
 
-    // as formas de alterar um carrinho é adicionando ou removendo produtos,os metodos responsaveis por isso são addProduct e deleteProduct
+    // as formas de alterar um carrinho é adicionando ou removendo produtos,os
+    // metodos responsaveis por isso são addProduct e deleteProduct
 
-    public void addProduct (Long carrinhoId, Long productId ){
+    public void addProduct(Long carrinhoId, Long productId) {
 
         Carrinho carrinho = repository.findById(carrinhoId).get();
         Produto produto = produtoRepository.findById(productId).get();
-        Usuario donoCarrinho = carrinho.getUsuario(); 
+        Usuario donoCarrinho = carrinho.getUsuario();
         if (donoCarrinho.getProdutos().contains(produto)) {
             throw new CartException(CartException.MSG_PRODUTO_PROPRIO);
         }
 
         List<Produto> listaProdutos = carrinho.getProdutos();
-        if(listaProdutos == null){
+        if (listaProdutos == null) {
             listaProdutos = new ArrayList<Produto>();
         }
         listaProdutos.add(produto);
         carrinho.setProdutos(listaProdutos);
-        carrinho.setVersao(carrinho.getVersao()+1);
+        carrinho.setVersao(carrinho.getVersao() + 1);
         total(carrinhoId);
         repository.save(carrinho);
     }
 
-    public void removeProduct (Long carrinhoId, Long productId){
+    public void removeProduct(Long carrinhoId, Long productId) {
 
         Carrinho carrinho = repository.findById(carrinhoId).get();
         Produto produto = produtoRepository.findById(productId).get();
@@ -85,25 +92,23 @@ public class CarrinhoService {
         if (listaProdutos != null && listaProdutos.contains(produto)) {
             listaProdutos.remove(produto);
             carrinho.setProdutos(listaProdutos);
-            carrinho.setVersao(carrinho.getVersao()+1);
+            carrinho.setVersao(carrinho.getVersao() + 1);
             total(carrinhoId);
             repository.save(carrinho);
-        }
-        else {
+        } else {
             throw new CartException(CartException.MSG_PRODUTO_NAO_ENCONTRADO);
         }
 
     }
 
-    public void total(Long cartId){
+    public void total(Long cartId) {
         Carrinho carrinho = repository.findById(cartId).get();
         List<Produto> listaProdutos = carrinho.getProdutos();
         double soma = listaProdutos.stream().mapToDouble(Produto::getValorUnitario).sum();
         carrinho.setTotal(soma);
     }
 
-    
-    public void clean(Long cartId){
+    public void clean(Long cartId) {
         Carrinho carrinho = repository.findById(cartId).get();
         List<Produto> listaProdutos = carrinho.getProdutos();
         listaProdutos.clear();
@@ -114,11 +119,10 @@ public class CarrinhoService {
     }
 
     public void delete(Long cartId) {
-        if (repository.existsById(cartId)) {
-            repository.deleteById(cartId);
-        } else {
-            throw new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO);
-        }
-    }
+        Carrinho carrinho = repository.findById(cartId)
+        .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
+        carrinho.setHabilitado(false);
+        repository.save(carrinho);
 
+}
 }

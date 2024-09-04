@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.enums;
+package br.com.ifpe.bazzar.modelo.enums;
 
 public enum EmailType {
     VERIFICATION,

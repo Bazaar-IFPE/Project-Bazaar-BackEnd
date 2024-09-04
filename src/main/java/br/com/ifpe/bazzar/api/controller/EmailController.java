@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ifpe.bazzar.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.email.EmailsService;
+import br.com.ifpe.bazzar.modelo.enums.EmailType;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController

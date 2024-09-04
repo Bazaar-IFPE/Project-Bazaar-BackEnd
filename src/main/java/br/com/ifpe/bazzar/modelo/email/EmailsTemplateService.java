@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import br.com.ifpe.bazzar.enums.EmailType;
+import br.com.ifpe.bazzar.modelo.enums.EmailType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

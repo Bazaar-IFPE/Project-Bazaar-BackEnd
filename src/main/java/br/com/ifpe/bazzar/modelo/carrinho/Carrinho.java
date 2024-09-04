@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -28,7 +29,7 @@ import lombok.Setter;
 @Table(name = "carrinho")
 public class Carrinho extends EntidadeAuditavel {
     
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
     name = "carrinho_produto",
     joinColumns = @JoinColumn(name = "carrinho_id"),

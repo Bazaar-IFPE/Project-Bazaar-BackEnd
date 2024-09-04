@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.controller.Auth.AuthenticationRequest;
-import br.com.ifpe.bazzar.enums.EmailType;
+import br.com.ifpe.bazzar.modelo.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;

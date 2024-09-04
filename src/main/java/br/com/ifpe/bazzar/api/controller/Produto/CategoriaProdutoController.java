@@ -1,4 +1,4 @@
-package br.com.ifpe.bazzar.api.controller;
+package br.com.ifpe.bazzar.api.controller.Produto;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ifpe.bazzar.api.Dto.CategoriaProdutoRequest;
 import br.com.ifpe.bazzar.modelo.Categoria.Categoria;
 import br.com.ifpe.bazzar.modelo.Categoria.CategoriaProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
