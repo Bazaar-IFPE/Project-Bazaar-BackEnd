@@ -7,8 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import br.com.ifpe.bazzar.api.Dto.AcessRequest;
-import br.com.ifpe.bazzar.api.Dto.AuthenticationRequest;
+import br.com.ifpe.bazzar.api.controller.Auth.AcessRequest;
+import br.com.ifpe.bazzar.api.controller.Auth.AuthenticationRequest;
 
 @Service
 public class AuthService {
