@@ -23,11 +23,11 @@ public class PedidosController {
   private PedidosService service ;
 
   @Operation(summary = "save a order.", description = "Serviço para salvar um pedido.")
-  @PostMapping("/{vendedorId}/{compradorId}/{cartId}/{pagamentoId}")
-  public ResponseEntity<Pedidos> save (@PathVariable Long vendedorId,@PathVariable Long compradorId,@PathVariable Long cartId ,@PathVariable Long pagamentoId ){
+  @PostMapping("/{compradorId}/{cartId}/{pagamentoId}")
+  public ResponseEntity<Pedidos> save (@PathVariable Long compradorId,@PathVariable Long cartId ,@PathVariable Long pagamentoId ){
     
-    service.save(compradorId, vendedorId, cartId, pagamentoId);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    Pedidos pedido = service.save(compradorId, cartId, pagamentoId);
+    return new ResponseEntity<>(pedido,HttpStatus.CREATED);
   }
   @Operation(summary = "find order by id.", description = "Serviço para buscar um pedido pelo id.")
   @GetMapping("/{id}")

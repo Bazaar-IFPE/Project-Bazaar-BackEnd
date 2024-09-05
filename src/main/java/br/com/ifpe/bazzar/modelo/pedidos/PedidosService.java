@@ -33,11 +33,9 @@ public class PedidosService {
   private PagamentoRepository pagamentoRepository;
 
  @Transactional
-public Pedidos save(Long compradorId, Long vendedorId, Long cartId, Long pagamentoId) {
+public Pedidos save(Long compradorId, Long cartId, Long pagamentoId) {
     
     Usuario comprador = userRepository.findById(compradorId)
-        .orElseThrow(() -> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
-    Usuario vendedor = userRepository.findById(vendedorId)
         .orElseThrow(() -> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
     Carrinho cart = cartRepository.findById(cartId)
         .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
@@ -47,7 +45,6 @@ public Pedidos save(Long compradorId, Long vendedorId, Long cartId, Long pagamen
     Pedidos pedido = new Pedidos();
     pedido.setCarrinho(cart);
     pedido.setComprador(comprador);
-    pedido.setVendedor(vendedor);
     pedido.setPagamento(pagamento);
     pedido.setDataCriacao(LocalDate.now());
     pedido.setHabilitado(Boolean.TRUE);
