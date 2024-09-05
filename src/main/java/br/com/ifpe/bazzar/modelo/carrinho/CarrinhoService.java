@@ -72,10 +72,12 @@ public class CarrinhoService {
         if (donoCarrinho.getProdutos().contains(produto)) {
             throw new CartException(CartException.MSG_PRODUTO_PROPRIO);
         }
-
         List<Produto> listaProdutos = carrinho.getProdutos();
         if (listaProdutos == null) {
             listaProdutos = new ArrayList<Produto>();
+        }
+        if(listaProdutos.contains(produto)){
+            throw new CartException(CartException.MSG_PRODUTO_REPETIDO);
         }
         listaProdutos.add(produto);
         carrinho.setProdutos(listaProdutos);
