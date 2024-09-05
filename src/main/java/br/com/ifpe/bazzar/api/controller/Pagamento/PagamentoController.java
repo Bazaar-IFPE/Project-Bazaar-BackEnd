@@ -30,8 +30,8 @@ public class PagamentoController {
     @Operation(summary = "create payment.", description = "Serviço para efetuar um pagamento .")
     @PostMapping("/{userId}")
     public ResponseEntity<Pagamento> save ( @PathVariable("userId") Long userId, @RequestBody PagamentoRequest request){
-        service.save(userId,request.build());
-        return new ResponseEntity<Pagamento>(HttpStatus.CREATED);
+        Pagamento saved = service.save(userId,request.build());
+        return new ResponseEntity<Pagamento>(saved, HttpStatus.CREATED);
     }
 
     @Operation(summary = "find all payments.", description = "Serviço para buscar todos pagamentos .")

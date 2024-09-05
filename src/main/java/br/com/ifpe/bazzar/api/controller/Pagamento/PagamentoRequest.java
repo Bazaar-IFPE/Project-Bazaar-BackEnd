@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class PagamentoRequest {
 
     private boolean situacao;
+   
 
     public Pagamento build(){
         return Pagamento.builder()
