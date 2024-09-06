@@ -36,13 +36,19 @@ public class ProdutoController {
     @Operation(summary = "save a product.", description = "Serviço para adicionar um produto.")
     @PostMapping("/{userId}")
     public ResponseEntity<Produto> save(@PathVariable("userId") Long userId,
-            @RequestParam("produto") String produtoRequestJson) {
+            @RequestParam("produto") String produtoRequestJson,
+            @RequestParam(value = "imagem", required = false) MultipartFile imagem) {
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ProdutoRequest request = objectMapper.readValue(produtoRequestJson, ProdutoRequest.class);
 
             Produto produtoNovo = request.build();
             produtoNovo.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
+
+            if(imagem != null && !imagem.isEmpty()){
+                produtoNovo.setImagem(imagem.getBytes());
+            }
 
             Produto produto = produtoService.save(userId, produtoNovo);
             return new ResponseEntity<>(produto, HttpStatus.CREATED);
@@ -100,6 +106,11 @@ public class ProdutoController {
             ProdutoRequest produtoRequest = objectMapper.readValue(request, ProdutoRequest.class);
 
             Produto produtoNovo = produtoRequest.build();
+
+            if (imagem != null && !imagem.isEmpty()) {
+                produtoNovo.setImagem(imagem.getBytes());
+            }
+            
             produtoNovo.setCategoria(categoriaProdutoService.obterPorId(produtoRequest.getIdCategoria()));
 
             produtoService.update(id, produtoNovo);
