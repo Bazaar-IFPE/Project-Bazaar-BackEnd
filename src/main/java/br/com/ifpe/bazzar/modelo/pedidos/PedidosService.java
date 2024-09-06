@@ -63,5 +63,10 @@ public Pedidos save(Long compradorId, Long cartId, Long pagamentoId) {
   public Pedidos findByID(Long id){
     return repository.findById(id).get();
   }
+
+  @Transactional
+  public List<Carrinho> findCartOrder (Long userId){
+    return repository.findCartOrder(userId);
+  }
   
 }

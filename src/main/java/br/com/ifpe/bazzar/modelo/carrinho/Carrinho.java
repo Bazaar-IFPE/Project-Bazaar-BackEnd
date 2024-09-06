@@ -1,6 +1,5 @@
 package br.com.ifpe.bazzar.modelo.carrinho;
 
-import org.hibernate.annotations.SQLRestriction;
 import java.util.List;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
@@ -25,7 +24,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@SQLRestriction("Habilitado = true")
 @Table(name = "carrinho")
 public class Carrinho extends EntidadeAuditavel {
     

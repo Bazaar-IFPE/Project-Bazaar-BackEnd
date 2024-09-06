@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.pedidos.Pedidos;
 import br.com.ifpe.bazzar.modelo.pedidos.PedidosService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +40,12 @@ public class PedidosController {
   @GetMapping
   public List<Pedidos> findAll (){
     return service.findAll();
+  }
+
+  @Operation(summary = "find cart orders.", description = "Serviço para buscar os carrinhos dos pedidos que batem com o id do usuario.")
+  @GetMapping("/compras/{userId}") 
+  public List<Carrinho> findCart (Long userId){
+    return service.findCartOrder(userId);
   }
   
 }
