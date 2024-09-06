@@ -84,7 +84,6 @@ public class UsuarioService {
             Usuario usuario = repository.findById(id).get();
             usuario.setNomeCompleto(usuarioAlterado.getNomeCompleto());
             usuario.setNumeroTelefone(usuarioAlterado.getNumeroTelefone());
-            usuario.setImagemUrl(usuarioAlterado.getImagemUrl());
             usuario.setSenha(passwordEncoder.encode(usuarioAlterado.getNovaSenha()));
             usuario.setVersao(usuario.getVersao() + 1);
             repository.save(usuario);

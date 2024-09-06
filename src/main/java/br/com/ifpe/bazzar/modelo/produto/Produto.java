@@ -50,8 +50,4 @@ public class Produto extends EntidadeAuditavel {
 
    @Column(nullable = false)
    private Double valorUnitario;
-
-   @Column(nullable = false)
-   private String imagemUrl;
-
 }

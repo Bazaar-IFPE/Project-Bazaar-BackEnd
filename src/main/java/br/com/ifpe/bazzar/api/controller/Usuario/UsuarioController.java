@@ -25,7 +25,6 @@ import org.thymeleaf.context.Context;
 
 import br.com.ifpe.bazzar.api.controller.Auth.AuthenticationRequest;
 import br.com.ifpe.bazzar.modelo.enums.EmailType;
-import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 import br.com.ifpe.bazzar.security.jwt.AuthService;
@@ -42,9 +41,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
-    @Autowired
-    private ImagemService imagemService;
 
     @Autowired
     private SpringTemplateEngine templateEngine;
@@ -103,14 +99,6 @@ public class UsuarioController {
             ObjectMapper objectMapper = new ObjectMapper();
             UsuarioAlteradoRequest usuarioAlteradoRequest = objectMapper.readValue(usuarioAlteradoRequestJson,
                     UsuarioAlteradoRequest.class);
-
-            Usuario usuarioAtual = usuarioService.obterPorID(id);
-            if (imagem != null && !imagem.isEmpty()) {
-                String imagemUrl = imagemService.uploadImage(imagem);
-                usuarioAlteradoRequest.setImagemUrl(imagemUrl);
-            } else {
-                usuarioAlteradoRequest.setImagemUrl(usuarioAtual.getImagemUrl());
-            }
 
             usuarioService.update(id, usuarioAlteradoRequest);
 

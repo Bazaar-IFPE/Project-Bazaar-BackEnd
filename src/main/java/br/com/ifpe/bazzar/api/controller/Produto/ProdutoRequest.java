@@ -30,9 +30,6 @@ public class ProdutoRequest {
  @DecimalMin(value = "1.0", inclusive = true)
  private Double valorUnitario;
 
- @NotBlank(message = "A imagem do produto é de preenchimento obrigatorio") 
- private String imagem;
-
    public Produto build() {
 
        return Produto.builder()
@@ -40,7 +37,6 @@ public class ProdutoRequest {
            .titulo(titulo)
            .descricao(descricao)
            .valorUnitario(valorUnitario)
-           .imagemUrl(imagem)
            .build();
    }
 }

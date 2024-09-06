@@ -19,13 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.ifpe.bazzar.modelo.Categoria.CategoriaProdutoService;
-import br.com.ifpe.bazzar.modelo.produto.ImagemService;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/api/produto")
 @CrossOrigin
@@ -34,15 +31,11 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @Autowired
-    private ImagemService imagemService;
-
-    @Autowired
     private CategoriaProdutoService categoriaProdutoService;
 
     @Operation(summary = "save a product.", description = "Serviço para adicionar um produto.")
     @PostMapping("/{userId}")
     public ResponseEntity<Produto> save(@PathVariable("userId") Long userId,
-            @RequestParam("imagem") @Valid MultipartFile imagem,
             @RequestParam("produto") String produtoRequestJson) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -50,9 +43,6 @@ public class ProdutoController {
 
             Produto produtoNovo = request.build();
             produtoNovo.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
-
-            String imagemUrl = imagemService.uploadImage(imagem);
-            produtoNovo.setImagemUrl(imagemUrl);
 
             Produto produto = produtoService.save(userId, produtoNovo);
             return new ResponseEntity<>(produto, HttpStatus.CREATED);
@@ -108,16 +98,6 @@ public class ProdutoController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ProdutoRequest produtoRequest = objectMapper.readValue(request, ProdutoRequest.class);
-
-            Produto produtoAtual = produtoService.obterPorID(id);
-
-            if (imagem != null && !imagem.isEmpty()) {
-                String imagemUrl = imagemService.uploadImage(imagem);
-                produtoRequest.setImagem(imagemUrl);
-            } else {
-
-                produtoRequest.setImagem(produtoAtual.getImagemUrl());
-            }
 
             Produto produtoNovo = produtoRequest.build();
             produtoNovo.setCategoria(categoriaProdutoService.obterPorId(produtoRequest.getIdCategoria()));

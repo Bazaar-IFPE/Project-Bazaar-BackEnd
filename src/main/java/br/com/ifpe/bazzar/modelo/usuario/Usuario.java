@@ -38,9 +38,6 @@ import jakarta.persistence.OneToOne;
 @NoArgsConstructor
 public class Usuario extends EntidadeAuditavel {
 
-    @Column
-    private String imagemUrl;
-
     @Column(nullable = false)
     private String nomeCompleto;
 
