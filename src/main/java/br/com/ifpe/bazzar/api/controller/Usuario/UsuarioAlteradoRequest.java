@@ -19,7 +19,7 @@ public class UsuarioAlteradoRequest {
 
     private String confirmaSenha;
 
-    private String imagemUrl;
+    private String imagem;
 
     public UsuarioAlteradoRequest build() {
 
@@ -29,7 +29,7 @@ public class UsuarioAlteradoRequest {
                 .numeroTelefone(numeroTelefone)
                 .confirmaSenha(confirmaSenha)
                 .novaSenha(novaSenha)
-                .imagemUrl(imagemUrl)
+                .imagem(imagem)
                 .build();
     }
 

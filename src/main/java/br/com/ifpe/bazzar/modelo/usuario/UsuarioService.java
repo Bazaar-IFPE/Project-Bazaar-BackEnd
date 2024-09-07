@@ -86,6 +86,7 @@ public class UsuarioService {
             usuario.setNumeroTelefone(usuarioAlterado.getNumeroTelefone());
             usuario.setSenha(passwordEncoder.encode(usuarioAlterado.getNovaSenha()));
             usuario.setVersao(usuario.getVersao() + 1);
+            usuario.setImagem(usuarioAlterado.getImagem());
             repository.save(usuario);
         
     }

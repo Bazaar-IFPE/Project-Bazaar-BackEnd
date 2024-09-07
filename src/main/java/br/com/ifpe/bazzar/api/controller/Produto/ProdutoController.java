@@ -22,6 +22,7 @@ import br.com.ifpe.bazzar.modelo.Categoria.CategoriaProdutoService;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoService;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
+import br.com.ifpe.bazzar.util.UploadUtil;
 import io.swagger.v3.oas.annotations.Operation;
 @RestController
 @RequestMapping("/api/produto")
@@ -46,8 +47,8 @@ public class ProdutoController {
             Produto produtoNovo = request.build();
             produtoNovo.setCategoria(categoriaProdutoService.obterPorId(request.getIdCategoria()));
 
-            if(imagem != null && !imagem.isEmpty()){
-                produtoNovo.setImagem(imagem.getBytes());
+            if(UploadUtil.fazerUploadImagem(imagem)){
+                produtoNovo.setImagem(imagem.getOriginalFilename());
             }
 
             Produto produto = produtoService.save(userId, produtoNovo);
@@ -107,8 +108,8 @@ public class ProdutoController {
 
             Produto produtoNovo = produtoRequest.build();
 
-            if (imagem != null && !imagem.isEmpty()) {
-                produtoNovo.setImagem(imagem.getBytes());
+            if (UploadUtil.fazerUploadImagem(imagem)) {
+                produtoNovo.setImagem(imagem.getOriginalFilename());
             }
             
             produtoNovo.setCategoria(categoriaProdutoService.obterPorId(produtoRequest.getIdCategoria()));

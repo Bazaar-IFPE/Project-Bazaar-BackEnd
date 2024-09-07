@@ -3,6 +3,7 @@ package br.com.ifpe.bazzar.api.controller.Produto;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,11 +27,11 @@ public class ProdutoRequest {
  @NotBlank(message = "A descrição do produto é de preenchimento obrigatorio") 
  private String descricao;
 
- @NotBlank(message = "O valor do produto é de preenchimento obrigatorio") 
+ @NotNull(message = "O valor do produto é de preenchimento obrigatorio") 
  @DecimalMin(value = "1.0", inclusive = true)
  private Double valorUnitario;
 
- private byte[] imagem;
+ private String imagem;
 
    public Produto build() {
 

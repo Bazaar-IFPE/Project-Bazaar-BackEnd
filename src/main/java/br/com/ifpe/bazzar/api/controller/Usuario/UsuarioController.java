@@ -28,6 +28,7 @@ import br.com.ifpe.bazzar.modelo.enums.EmailType;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioService;
 import br.com.ifpe.bazzar.security.jwt.AuthService;
+import br.com.ifpe.bazzar.util.UploadUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
@@ -93,12 +94,16 @@ public class UsuarioController {
     @Operation(summary = "update a user.", description = "Serviço para atualizar um usuario.")
     @PutMapping("/{id}")
     public ResponseEntity<String> editUser(@PathVariable("id") Long id,
-            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
-            @RequestPart(value = "usuario", required = false) String usuarioAlteradoRequestJson) {
+            @RequestParam(value = "imagem", required = false) MultipartFile imagem,
+            @RequestParam(value = "usuario", required = false) String usuarioAlteradoRequestJson) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             UsuarioAlteradoRequest usuarioAlteradoRequest = objectMapper.readValue(usuarioAlteradoRequestJson,
                     UsuarioAlteradoRequest.class);
+
+            if(UploadUtil.fazerUploadImagem(imagem)){
+                usuarioAlteradoRequest.setImagem(imagem.getOriginalFilename());
+            }
 
             usuarioService.update(id, usuarioAlteradoRequest);
 

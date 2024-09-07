@@ -39,6 +39,8 @@ public class UsuarioRequest {
     @NotBlank(message = "O numero de telefone e de preenchimento obrigatorio")
     private String numeroTelefone;
 
+    private String imagem;
+
 
     public Usuario build() {
 
@@ -50,6 +52,7 @@ public class UsuarioRequest {
                 .senha(senha)
                 .cpf(cpf)
                 .numeroTelefone(numeroTelefone)
+                .imagem(imagem)
                 .build();
     }
 

@@ -76,4 +76,6 @@ public class Usuario extends EntidadeAuditavel {
     @Column(nullable = false)
     private UserType situacao;
 
+    @Column
+    private String imagem;
 }
