@@ -30,12 +30,11 @@ public class CarrinhoService {
 
         Usuario usuario = usuarioRepository.findById(userId)
                 .orElseThrow(() -> new UserException("Usuário não encontrado"));
-        // Verificar se o usuário já tem um carrinho habilitado
+
         boolean carrinhoHabilitado = usuario.getCarrinhos().stream()
                 .anyMatch(carrinho -> carrinho.getHabilitado());
 
         if (!carrinhoHabilitado) {
-            // Criar novo carrinho
             Carrinho carrinho = new Carrinho();
             carrinho.setUsuario(usuario);
             carrinho.setHabilitado(true);
