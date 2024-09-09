@@ -35,7 +35,7 @@ public class Carrinho extends EntidadeAuditavel {
     private List<Produto> produtos;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id, nullable = false")
     private Usuario usuario;
 
     @Column

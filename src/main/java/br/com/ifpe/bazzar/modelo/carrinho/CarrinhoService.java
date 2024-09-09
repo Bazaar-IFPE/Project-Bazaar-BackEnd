@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.stream.Collectors;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.produto.ProdutoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
@@ -27,27 +27,29 @@ public class CarrinhoService {
     private ProdutoRepository produtoRepository;
 
     public Carrinho save(Long userId) {
-        
-        Optional<Usuario> userWithCart = usuarioRepository.userWithCar(userId);
 
-        if(!userWithCart.isPresent()){ 
-            Usuario usuario = usuarioRepository.findById(userId).get();
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new UserException("Usuário não encontrado"));
+        // Verificar se o usuário já tem um carrinho habilitado
+        boolean carrinhoHabilitado = usuario.getCarrinhos().stream()
+                .anyMatch(carrinho -> carrinho.getHabilitado());
+
+        if (!carrinhoHabilitado) {
+            // Criar novo carrinho
             Carrinho carrinho = new Carrinho();
             carrinho.setUsuario(usuario);
-            carrinho.setHabilitado(Boolean.TRUE);
+            carrinho.setHabilitado(true);
             carrinho.setDataCriacao(LocalDate.now());
             carrinho.setVersao(1L);
             carrinho.setTotal(0.0);
             Carrinho carrinhoSave = repository.save(carrinho);
-    
-            usuario.setCarrinho(carrinhoSave);
+            usuario.getCarrinhos().add(carrinhoSave);
             usuarioRepository.save(usuario);
-    
+
             return carrinhoSave;
-        }else{
+        } else {
             throw new UserException(UserException.MSG_USUARIO_TEM_CARRINHO);
         }
-       
     }
 
     public List<Carrinho> findAll() {
@@ -129,11 +131,15 @@ public class CarrinhoService {
         repository.save(carrinho);
     }
 
-    public void delete(Long cartId) {
-        Carrinho carrinho = repository.findById(cartId)
-        .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
-        carrinho.setHabilitado(false);
-        repository.save(carrinho);
+    public void delete(Long userId) {
+        Usuario usuario = usuarioRepository.findById(userId).get();
+        List<Carrinho> carrinhosHabilitados = usuario.getCarrinhos().stream()
+        .filter(carrinho -> carrinho.getHabilitado())
+        .collect(Collectors.toList());
 
+        carrinhosHabilitados.forEach(carrinho -> {
+            carrinho.setHabilitado(false);
+            repository.save(carrinho);
+        });
 }
 }

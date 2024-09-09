@@ -71,9 +71,9 @@ public class CarrinhoController {
     }
 
     @Operation(summary = "delete cart by id.", description = "Serviço para deletar um carrinho por id .")
-    @DeleteMapping("/{cartId}")
-    public void delete (Long cartId){
-        service.delete(cartId);
+    @DeleteMapping("/{userId}")
+    public void delete (Long userId){
+        service.delete(userId);
     }
     
     

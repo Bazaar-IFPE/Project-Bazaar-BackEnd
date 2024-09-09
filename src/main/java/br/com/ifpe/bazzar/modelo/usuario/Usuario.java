@@ -73,7 +73,7 @@ public class Usuario extends EntidadeAuditavel {
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
     @Fetch(FetchMode.SUBSELECT)
     @JsonIgnore
-    private List<Carrinho> carrinho;
+    private List<Carrinho> carrinhos;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
