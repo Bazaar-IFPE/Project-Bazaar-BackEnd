@@ -27,6 +27,7 @@ public class CarrinhoService {
     private ProdutoRepository produtoRepository;
 
     public Carrinho save(Long userId) {
+        
         Optional<Usuario> userWithCart = usuarioRepository.userWithCar(userId);
 
         if(!userWithCart.isPresent()){ 

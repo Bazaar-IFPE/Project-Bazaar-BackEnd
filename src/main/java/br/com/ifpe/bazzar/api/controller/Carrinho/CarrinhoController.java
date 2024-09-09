@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoService;
-import br.com.ifpe.bazzar.util.exception.CartException;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -49,15 +48,9 @@ public class CarrinhoController {
     @Operation(summary = "find id cart  .", description = "Serviço para buscar o id de um carrinho .")
     @GetMapping("cartId/{userId}")
     public Long findCart(@PathVariable Long userId) {
-        try {
-            return service.findCart(userId);
-        } catch (Exception e) {
-            throw new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO);
-        }
+       return service.findCart(userId);
         
     }
-
-
 
     @Operation(summary = "adding product from cart by id.", description = "Serviço para alterar um carrinho adicionando um produto por id .")
     @PutMapping("/add/{cartId}/{productId}")

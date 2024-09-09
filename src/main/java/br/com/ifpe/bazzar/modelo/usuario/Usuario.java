@@ -26,7 +26,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.OneToOne;
 
 @Entity
 @Table(name = "Usuario")
@@ -71,9 +70,10 @@ public class Usuario extends EntidadeAuditavel {
     @Fetch(FetchMode.SUBSELECT)
     private List<Pagamento> pagamentos;
 
-    @OneToOne(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     @JsonIgnore
-    private Carrinho carrinho;
+    private List<Carrinho> carrinho;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
