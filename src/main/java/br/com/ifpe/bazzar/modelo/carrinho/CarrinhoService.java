@@ -12,6 +12,7 @@ import br.com.ifpe.bazzar.modelo.produto.ProdutoRepository;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
 import br.com.ifpe.bazzar.util.exception.CartException;
+import br.com.ifpe.bazzar.util.exception.UserException;
 
 @Service
 public class CarrinhoService {
@@ -26,20 +27,26 @@ public class CarrinhoService {
     private ProdutoRepository produtoRepository;
 
     public Carrinho save(Long userId) {
+        Optional<Usuario> userWithCart = usuarioRepository.userWithCar(userId);
 
-        Usuario usuario = usuarioRepository.findById(userId).get();
-        Carrinho carrinho = new Carrinho();
-        carrinho.setUsuario(usuario);
-        carrinho.setHabilitado(Boolean.TRUE);
-        carrinho.setDataCriacao(LocalDate.now());
-        carrinho.setVersao(1L);
-        carrinho.setTotal(0.0);
-        Carrinho carrinhoSave = repository.save(carrinho);
-
-        usuario.setCarrinho(carrinhoSave);
-        usuarioRepository.save(usuario);
-
-        return carrinhoSave;
+        if(!userWithCart.isPresent()){ 
+            Usuario usuario = usuarioRepository.findById(userId).get();
+            Carrinho carrinho = new Carrinho();
+            carrinho.setUsuario(usuario);
+            carrinho.setHabilitado(Boolean.TRUE);
+            carrinho.setDataCriacao(LocalDate.now());
+            carrinho.setVersao(1L);
+            carrinho.setTotal(0.0);
+            Carrinho carrinhoSave = repository.save(carrinho);
+    
+            usuario.setCarrinho(carrinhoSave);
+            usuarioRepository.save(usuario);
+    
+            return carrinhoSave;
+        }else{
+            throw new UserException(UserException.MSG_USUARIO_TEM_CARRINHO);
+        }
+       
     }
 
     public List<Carrinho> findAll() {
@@ -57,7 +64,8 @@ public class CarrinhoService {
     }
 
     public Long findCart(Long id) {
-        return repository.findCarrinhoIdByUsuarioId(id).get();
+        return repository.findCarrinhoIdByUsuarioId(id)
+                .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
 
     }
 

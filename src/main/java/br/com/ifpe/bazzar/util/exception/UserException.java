@@ -12,6 +12,7 @@ public class UserException extends RuntimeException {
     public static final String MSG_TOKEN_INVALIDO = "token invalido.";
     public static final String MSG_ENVIO_FALHO_EMAIL = "Erro ao enviar um email.";
     public static final String MSG_USUARIO_NAO_ENCONTRADO = "O usuario não foi encontrado";
+    public static final String MSG_USUARIO_TEM_CARRINHO = "O usuario já tem um carrinho";
 
     public UserException(String msg){
         super(String.format(msg));
