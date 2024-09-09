@@ -1,17 +1,18 @@
 package br.com.ifpe.bazzar.modelo.usuario;
 
 import java.util.List;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.endereco.Endereco;
 import br.com.ifpe.bazzar.modelo.enums.UserType;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.produto.Produto;
-import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -26,7 +27,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.OneToOne;
 
 @Entity
 @Table(name = "Usuario")
@@ -37,6 +37,9 @@ import jakarta.persistence.OneToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Usuario extends EntidadeAuditavel {
+
+    @Column
+    private String imagem;
 
     @Column(nullable = false)
     private String nomeCompleto;
@@ -68,14 +71,13 @@ public class Usuario extends EntidadeAuditavel {
     @Fetch(FetchMode.SUBSELECT)
     private List<Pagamento> pagamentos;
 
-    @OneToOne(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     @JsonIgnore
-    private Carrinho carrinho;
+    private List<Carrinho> carrinhos;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType situacao;
 
-    @Column
-    private String imagem;
 }

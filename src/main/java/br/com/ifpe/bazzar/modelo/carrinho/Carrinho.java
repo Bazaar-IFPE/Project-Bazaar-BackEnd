@@ -1,7 +1,7 @@
 package br.com.ifpe.bazzar.modelo.carrinho;
 
-import org.hibernate.annotations.SQLRestriction;
 import java.util.List;
+
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
@@ -11,7 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@SQLRestriction("Habilitado = true")
 @Table(name = "carrinho")
 public class Carrinho extends EntidadeAuditavel {
     
@@ -36,8 +35,8 @@ public class Carrinho extends EntidadeAuditavel {
     inverseJoinColumns = @JoinColumn(name = "produto_id"))
     private List<Produto> produtos;
 
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
+    @ManyToOne
+    @JoinColumn(name = "usuario_id, nullable = false")
     private Usuario usuario;
 
     @Column

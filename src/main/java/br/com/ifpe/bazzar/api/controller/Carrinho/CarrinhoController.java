@@ -48,10 +48,9 @@ public class CarrinhoController {
     @Operation(summary = "find id cart  .", description = "Serviço para buscar o id de um carrinho .")
     @GetMapping("cartId/{userId}")
     public ResponseEntity<Long> findCart(@PathVariable Long userId) {
-        return service.findCart(userId);
+       return service.findCart(userId);
+        
     }
-
-
 
     @Operation(summary = "adding product from cart by id.", description = "Serviço para alterar um carrinho adicionando um produto por id .")
     @PutMapping("/add/{cartId}/{productId}")
@@ -72,9 +71,9 @@ public class CarrinhoController {
     }
 
     @Operation(summary = "delete cart by id.", description = "Serviço para deletar um carrinho por id .")
-    @DeleteMapping("/{cartId}")
-    public void delete (Long cartId){
-        service.delete(cartId);
+    @DeleteMapping("/{userId}")
+    public void delete (Long userId){
+        service.delete(userId);
     }
     
     
