@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.ifpe.bazzar.modelo.produto.Produto;
@@ -47,18 +48,22 @@ public class CarrinhoService {
     }
 
     public Carrinho findById(Long id) {
-    Optional<Carrinho> carrinho = repository.findById(id);
-    if (carrinho.isPresent()) {
-        return carrinho.get();
-    } else {
-        throw new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO);
-    }
+        Optional<Carrinho> carrinho = repository.findById(id);
+        if (carrinho.isPresent()) {
+            return carrinho.get();
+        } else {
+            throw new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO);
+        }
 
     }
 
-    public Long findCart(Long id) {
-        return repository.findCarrinhoIdByUsuarioId(id).get();
-
+    public ResponseEntity<Long> findCart(Long id) {
+        Optional<Long> cartId = repository.findCarrinhoIdByUsuarioId(id);
+        if (cartId.isPresent()) {
+            return ResponseEntity.ok(cartId.get());
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     // as formas de alterar um carrinho é adicionando ou removendo produtos,os
@@ -76,7 +81,7 @@ public class CarrinhoService {
         if (listaProdutos == null) {
             listaProdutos = new ArrayList<Produto>();
         }
-        if(listaProdutos.contains(produto)){
+        if (listaProdutos.contains(produto)) {
             throw new CartException(CartException.MSG_PRODUTO_REPETIDO);
         }
         listaProdutos.add(produto);
@@ -122,9 +127,9 @@ public class CarrinhoService {
 
     public void delete(Long cartId) {
         Carrinho carrinho = repository.findById(cartId)
-        .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
+                .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
         carrinho.setHabilitado(false);
         repository.save(carrinho);
 
-}
+    }
 }

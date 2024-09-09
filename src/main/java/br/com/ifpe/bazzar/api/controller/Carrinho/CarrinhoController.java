@@ -47,7 +47,7 @@ public class CarrinhoController {
 
     @Operation(summary = "find id cart  .", description = "Serviço para buscar o id de um carrinho .")
     @GetMapping("cartId/{userId}")
-    public Long findCart(@PathVariable Long userId) {
+    public ResponseEntity<Long> findCart(@PathVariable Long userId) {
         return service.findCart(userId);
     }
 
