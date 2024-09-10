@@ -94,10 +94,10 @@ public class ProdutoController {
     public List<Produto> ProdutosUsuario(@PathVariable Long id) {
         return produtoService.ProdutoUsuario(id);
     }
-
+    @Operation(summary = "search sell .", description = "Serviço para buscar as vendas de um usuario.")
     @GetMapping("/vendas/{userId}")
     public List<Produto> vendasUsuario(@PathVariable Long userId) {
-        return produtoService.produtosDesabilitadosDoUsuario(userId);
+        return produtoService.vendas(userId);
     }
 
 

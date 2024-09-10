@@ -34,12 +34,12 @@ public class PagamentoController {
         return new ResponseEntity<Pagamento>(saved, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "find all payments.", description = "Serviço para buscar todos pagamentos .")
+    @Operation(summary = "find payment by id.", description = "Serviço para buscar um pagamento por id .")
     @GetMapping("{id}")
     public Pagamento finById(@RequestParam Long id) {
         return service.findById(id);
     }
-    @Operation(summary = "find payment by id.", description = "Serviço para buscar um pagamento por id .")
+    @Operation(summary = "find all payments.", description = "Serviço para buscar todos pagamentos .")
     @GetMapping
     public List<Pagamento> findAll(){
         return service.findAll();

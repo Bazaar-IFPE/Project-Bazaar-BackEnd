@@ -146,8 +146,8 @@ public class ProdutoService {
       return usuario.getProdutos();
    }
 
-   public List<Produto> produtosDesabilitadosDoUsuario (Long id){
-      List<Produto> lista = repository.produtosDesabilitadosDoUsuario(id);
+   public List<Produto> vendas (Long id){
+      List<Produto> lista = repository.vendas(id);
       return lista;
    }
 
