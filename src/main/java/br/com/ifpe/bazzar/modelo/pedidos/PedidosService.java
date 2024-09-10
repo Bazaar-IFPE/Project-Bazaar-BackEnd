@@ -8,6 +8,7 @@ import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoRepository;
 import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoService;
 import br.com.ifpe.bazzar.modelo.pagamento.Pagamento;
 import br.com.ifpe.bazzar.modelo.pagamento.PagamentoRepository;
+import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
 import br.com.ifpe.bazzar.util.exception.CartException;
@@ -37,10 +38,17 @@ public Pedidos save(Long compradorId, Long cartId, Long pagamentoId) {
     
     Usuario comprador = userRepository.findById(compradorId)
         .orElseThrow(() -> new UserException(UserException.MSG_USUARIO_NAO_ENCONTRADO));
+
+    //todo: procurar dentro da lista de carrinho se o carrinho com o id fornecido esta habilitado 
     Carrinho cart = cartRepository.findById(cartId)
         .orElseThrow(() -> new CartException(CartException.MSG_CARRINHO_NAO_ENCONTRADO));
+
     Pagamento pagamento = pagamentoRepository.findById(pagamentoId)
         .orElseThrow(() -> new PaymentException(PaymentException.MSG_PAGAMENTO_NAO_ENCONTRADO));
+    
+    // Desativar o carrinho atual
+    cart.setHabilitado(false);
+    cartRepository.save(cart);    
 
     Pedidos pedido = new Pedidos();
     pedido.setCarrinho(cart);
@@ -50,8 +58,15 @@ public Pedidos save(Long compradorId, Long cartId, Long pagamentoId) {
     pedido.setHabilitado(Boolean.TRUE);
     pedido.setVersao(1L);
     Pedidos pedidoSalvo = repository.save(pedido);
+
+    List<Produto> listaProduto = cartRepository.listaProdutos(cartId);
+    
+    System.out.println("-------------lista---------------");
+    System.out.println(listaProduto);
+    //TODO:metodo para buscar os produtos dentro do carrinho
     carrinhoService.delete(cartId);
     return pedidoSalvo;
+
 }
 
   @Transactional

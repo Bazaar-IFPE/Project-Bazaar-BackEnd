@@ -2,6 +2,8 @@ package br.com.ifpe.bazzar.modelo.carrinho;
 
 import java.util.List;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
@@ -26,6 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Table(name = "carrinho")
+
 public class Carrinho extends EntidadeAuditavel {
     
     @ManyToMany(cascade = CascadeType.ALL)
@@ -36,7 +39,7 @@ public class Carrinho extends EntidadeAuditavel {
     private List<Produto> produtos;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id, nullable = false")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @Column

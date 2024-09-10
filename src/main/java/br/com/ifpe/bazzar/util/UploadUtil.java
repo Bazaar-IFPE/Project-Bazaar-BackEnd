@@ -16,7 +16,7 @@ public class UploadUtil {
 
             try {
                 // criando diretório para armazenar o arquivo;
-                String pastaUploadImagem = "C:\\Users\\danil\\Desktop\\IFPE\\IFPE - BAZZAR\\Project-Bazaar-BackEnd\\src\\main\\resources\\static\\uploaded-imgs";
+                String pastaUploadImagem = "C:\\Users\\Geovane\\Documents\\bazaar\\Project-Bazaar-BackEnd\\src\\main\\resources\\static\\uploaded-imgs";
                 File dir = new File(pastaUploadImagem);
                 if(!dir.exists()){
                     dir.mkdirs();

@@ -33,9 +33,10 @@ public class CarrinhoService {
 
         Usuario usuario = usuarioRepository.findById(userId)
                 .orElseThrow(() -> new UserException("Usuário não encontrado"));
-        // Verificar se o usuário já tem um carrinho habilitado
+
         boolean carrinhoHabilitado = usuario.getCarrinhos().stream()
                 .anyMatch(carrinho -> carrinho.getHabilitado());
+
 
         if (!carrinhoHabilitado) {
             // Criar novo carrinho
@@ -46,7 +47,12 @@ public class CarrinhoService {
             carrinho.setVersao(1L);
             carrinho.setTotal(0.0);
             Carrinho carrinhoSave = repository.save(carrinho);
-            usuario.getCarrinhos().add(carrinhoSave);
+            
+            if (usuario.getCarrinhos() == null) {
+                usuario.setCarrinhos(new ArrayList<>());
+            }
+            List<Carrinho> carrinhos = usuario.getCarrinhos();
+            carrinhos.add(carrinhoSave);
             usuarioRepository.save(usuario);
 
             return carrinhoSave;
@@ -138,14 +144,24 @@ public class CarrinhoService {
     }
 
     public void delete(Long userId) {
-        Usuario usuario = usuarioRepository.findById(userId).get();
-        List<Carrinho> carrinhosHabilitados = usuario.getCarrinhos().stream()
-                .filter(carrinho -> carrinho.getHabilitado())
-                .collect(Collectors.toList());
+    Usuario usuario = usuarioRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    List<Carrinho> carrinhos = usuario.getCarrinhos();
+    
+    System.out.println("Todos os carrinhos do usuário: " + carrinhos);
+    
+    List<Carrinho> carrinhosHabilitados = carrinhos.stream()
+            .filter(Carrinho::getHabilitado)  // Filtra os carrinhos habilitados
+            .collect(Collectors.toList());
 
-        carrinhosHabilitados.forEach(carrinho -> {
-            carrinho.setHabilitado(false);
-            repository.save(carrinho);
-        });
+    System.out.println("Carrinhos habilitados: " + carrinhosHabilitados);
+
+    carrinhosHabilitados.forEach(carrinho -> {
+        carrinho.setHabilitado(false);
+        repository.save(carrinho);
+    });
+    }
+
+    public List<Carrinho> findByCartOk(Long userId){
+        return repository.findByCartOk(userId);
     }
 }

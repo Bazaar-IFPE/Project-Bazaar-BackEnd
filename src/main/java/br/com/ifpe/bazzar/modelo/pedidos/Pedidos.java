@@ -29,7 +29,7 @@ public class Pedidos extends EntidadeAuditavel {
     private Usuario comprador;
 
     @OneToOne
-    @JoinColumn(name = "carrinho_id")
+    @JoinColumn(name = "carrinho_id", unique = true)
     private Carrinho carrinho;
 
     @OneToOne

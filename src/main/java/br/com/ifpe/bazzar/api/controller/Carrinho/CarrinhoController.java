@@ -18,6 +18,7 @@ import br.com.ifpe.bazzar.modelo.carrinho.Carrinho;
 import br.com.ifpe.bazzar.modelo.carrinho.CarrinhoService;
 import io.swagger.v3.oas.annotations.Operation;
 
+
 @RestController
 @RequestMapping("/api/carrinho")
 @CrossOrigin
@@ -74,6 +75,11 @@ public class CarrinhoController {
     @DeleteMapping("/{userId}")
     public void delete (Long userId){
         service.delete(userId);
+    }
+    
+    @GetMapping("ListH/{userId}")
+    public List<Carrinho> findCarthabilidato(@PathVariable Long userId) {
+        return service.findByCartOk(userId);
     }
     
     
