@@ -63,8 +63,10 @@ public Pedidos save(Long compradorId, Long cartId, Long pagamentoId) {
     
     System.out.println("-------------lista---------------");
     System.out.println(listaProduto);
-    //TODO:metodo para buscar os produtos dentro do carrinho
-    carrinhoService.delete(cartId);
+    
+    
+    Long dono = cartRepository.usuarioDoCarrinho(cartId);
+    carrinhoService.delete(dono);
     return pedidoSalvo;
 
 }
