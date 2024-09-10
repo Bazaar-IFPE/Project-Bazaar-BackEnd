@@ -44,7 +44,7 @@ public class PedidosController {
 
   @Operation(summary = "find cart orders.", description = "Serviço para buscar os carrinhos dos pedidos que batem com o id do usuario.")
   @GetMapping("/compras/{userId}") 
-  public List<Carrinho> findCart (Long userId){
+  public List<Carrinho> findCart (@PathVariable Long userId){
     return service.findCartOrder(userId);
   }
   
