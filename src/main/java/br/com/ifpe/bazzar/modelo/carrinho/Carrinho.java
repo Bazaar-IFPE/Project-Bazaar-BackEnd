@@ -1,9 +1,6 @@
 package br.com.ifpe.bazzar.modelo.carrinho;
 
 import java.util.List;
-
-import org.hibernate.annotations.SQLRestriction;
-
 import br.com.ifpe.bazzar.modelo.produto.Produto;
 import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.util.entity.EntidadeAuditavel;
