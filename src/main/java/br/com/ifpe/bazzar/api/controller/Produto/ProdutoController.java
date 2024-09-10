@@ -95,6 +95,12 @@ public class ProdutoController {
         return produtoService.ProdutoUsuario(id);
     }
 
+    @GetMapping("/vendas/{userId}")
+    public List<Produto> vendasUsuario(@PathVariable Long userId) {
+        return produtoService.produtosDesabilitadosDoUsuario(userId);
+    }
+
+
     @Operation(summary = "update a product.", description = "Serviço para atualizar um produto.")
     @PutMapping("/{id}")
     public ResponseEntity<Produto> update(

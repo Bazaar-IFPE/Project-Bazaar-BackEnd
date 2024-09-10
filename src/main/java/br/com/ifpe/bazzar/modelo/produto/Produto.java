@@ -1,7 +1,9 @@
 package br.com.ifpe.bazzar.modelo.produto;
 
 
-import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,7 +24,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "Produto")
-@SQLRestriction("habilitado = true")
+@FilterDef(name = "habilitadoFilter", parameters = @ParamDef(name = "habilitado", type = Boolean.class))
+@Filter(name = "habilitadoFilter", condition = "habilitado = :habilitado")
 @Builder        
 @Getter
 @Setter

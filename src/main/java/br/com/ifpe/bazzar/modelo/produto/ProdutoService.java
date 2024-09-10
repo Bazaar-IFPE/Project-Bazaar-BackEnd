@@ -3,7 +3,7 @@ package br.com.ifpe.bazzar.modelo.produto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +13,7 @@ import br.com.ifpe.bazzar.modelo.usuario.Usuario;
 import br.com.ifpe.bazzar.modelo.usuario.UsuarioRepository;
 import br.com.ifpe.bazzar.util.exception.ProdException;
 import br.com.ifpe.bazzar.util.exception.UserException;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -22,6 +23,9 @@ public class ProdutoService {
 
    @Autowired
    private UsuarioRepository userRepository;
+
+   @Autowired
+    private EntityManager entityManager;
 
    //métodos para  produtos relacionados com usuario 
    @Transactional
@@ -96,6 +100,8 @@ public class ProdutoService {
    //métodos para produtos em geral
 
    public List<Produto> listarTodos(String descricao) {
+      Session session = entityManager.unwrap(Session.class);
+      session.enableFilter("habilitadoFilter").setParameter("habilitado", true);
 
       if (descricao == null) {
          return repository.findAll();
@@ -105,11 +111,16 @@ public class ProdutoService {
    }
 
    public List<Produto> topCincoBaratosPorCategoria(String descricao) {
+      Session session = entityManager.unwrap(Session.class);
+      session.enableFilter("habilitadoFilter").setParameter("habilitado", true);
+
       Pageable pageable = PageRequest.of(0, 5);
       return repository.topFiveCheapest(descricao, pageable);
    }
 
    public Produto obterPorID(Long id) {
+      Session session = entityManager.unwrap(Session.class);
+      session.enableFilter("habilitadoFilter").setParameter("habilitado", true);
 
       return repository.findById(id).get();
    }
@@ -122,16 +133,23 @@ public class ProdutoService {
    }
 
    public List<Produto> search(String produto){
-
+      Session session = entityManager.unwrap(Session.class);
+      session.enableFilter("habilitadoFilter").setParameter("habilitado", true);
       return repository.search(produto);
    }
   
    public List<Produto> ProdutoUsuario(Long id){
-     Usuario usuario = userRepository.findById(id).get();
-     return usuario.getProdutos();
+      Session session = entityManager.unwrap(Session.class);
+      session.enableFilter("habilitadoFilter").setParameter("habilitado", true);
+
+      Usuario usuario = userRepository.findById(id).get();
+      return usuario.getProdutos();
    }
 
-
+   public List<Produto> produtosDesabilitadosDoUsuario (Long id){
+      List<Produto> lista = repository.produtosDesabilitadosDoUsuario(id);
+      return lista;
+   }
 
 
 }
