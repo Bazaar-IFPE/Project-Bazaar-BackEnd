@@ -25,7 +25,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     @Query("SELECT p.usuario FROM Produto p WHERE p.id = :idProduto")
     Usuario obterUsuarioDoProduto(Long idProduto);
 
-    @Query("SELECT p FROM Produto p JOIN Carrinho c ON p MEMBER OF c.produtos JOIN Pedidos ped ON ped.carrinho = c WHERE p.habilitado = false AND c.usuario.id = :usuarioId")
+    @Query("SELECT p FROM Produto p WHERE p.usuario.id = :usuarioId AND p.habilitado = false")
     List<Produto> vendas(Long usuarioId);
    
+    @Query("SELECT p FROM Produto p WHERE p.usuario.id = :usuarioId AND p.habilitado = true")
+    List<Produto> findByUsuarioHabilitado(@Param("usuarioId") Long usuarioId);
 }

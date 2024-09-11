@@ -3,6 +3,7 @@ package br.com.ifpe.bazzar.modelo.produto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -142,8 +143,7 @@ public class ProdutoService {
       Session session = entityManager.unwrap(Session.class);
       session.enableFilter("habilitadoFilter").setParameter("habilitado", true);
 
-      Usuario usuario = userRepository.findById(id).get();
-      return usuario.getProdutos();
+      return repository.findByUsuarioHabilitado(id);
    }
 
    public List<Produto> vendas (Long id){
